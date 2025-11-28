@@ -5,11 +5,13 @@ import useUserProfile from "../../hooks/useUserProfile";
 import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import useUploadProfileImage from "../../hooks/useUploadProfileImage";
+import FadeInView from "../animations/FadeInView";
+import { useEffect } from "react";
 //#endregion ------------ IMPORTS ------------
 
 const USER_PLACEHOLDER = require("../../assets/img/User-Placeholder.png");
 
-export default function UserInfo() {
+const UserInfo = () => {
 	const { loading, error } = useUserProfile();
 	const { uploadImage, loading: loadingUpload, error: errorUpload, success } = useUploadProfileImage();
 
@@ -20,7 +22,7 @@ export default function UserInfo() {
 	const handlePickImage = async () => {
 		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 		if (status !== "granted") {
-			Alert("Se requieren permisos para acceder a la galería.");
+			Alert.alert("Permiso denegado", "Se requieren permisos para acceder a la galería.");
 			return;
 		}
 		const result = await ImagePicker.launchImageLibraryAsync({
@@ -35,39 +37,72 @@ export default function UserInfo() {
 		}
 	};
 
-	return (
-		<>
-			{loading ? (
+	if (loading) {
+		return (
+			<View style={styles.centered}>
 				<ActivityIndicator size="large" color="#27AAE1" style={{ marginVertical: 20 }} />
-			) : error ? (
+			</View>
+		);
+	}
+
+	if (error) {
+		return (
+			<View style={styles.centered}>
 				<Text style={{ color: "red", marginBottom: 20 }}>{error}</Text>
-			) : (
-				<>
+			</View>
+		);
+	}
+
+	// useEffect(() => {
+	// 	if (errorUpload) {
+	// 		Toast.show({
+	// 			type: "error",
+	// 			text1: "Error al subir la imagen",
+	// 			text2: errorUpload,
+	// 		});
+	// 	}
+	// }, [errorUpload]);
+
+	// useEffect(() => {
+	// 	if (success) {
+	// 		Toast.show({
+	// 			type: "success",
+	// 			text1: "¡Imagen actualizada!",
+	// 		});
+	// 	}
+	// }, [success]);
+
+	return (
+		<View>
+			<TouchableOpacity onPress={handlePickImage} disabled={loadingUpload} activeOpacity={0.8}>
+				<FadeInView>
 					<Image source={profileImage ? { uri: profileImage } : USER_PLACEHOLDER} style={styles.avatar} />
-					<TouchableOpacity onPress={handlePickImage} disabled={loadingUpload}>
-						<Text style={styles.editarFoto}>{loadingUpload ? "Subiendo imagen..." : "Editar foto"}</Text>
-					</TouchableOpacity>
-					{errorUpload && <Text style={{ color: "red", textAlign: "center" }}>{errorUpload}</Text>}
-					{success && <Text style={{ color: "green", textAlign: "center" }}>¡Imagen actualizada!</Text>}
-					<View style={styles.infoRow}>
-						<View style={styles.iconAndLabelWrapper}>
-							<FontAwesome5 name="user" size={20} color="#222" style={styles.icon} solid />
-							<Text style={styles.infoLabel}>USUARIO:</Text>
-						</View>
-						<Text style={styles.infoValue}>{username}</Text>
-					</View>
-					<View style={styles.infoRow}>
-						<View style={styles.iconAndLabelWrapper}>
-							<FontAwesome5 name="envelope" size={20} color="#222" style={styles.icon} solid />
-							<Text style={styles.infoLabel}>CORREO:</Text>
-						</View>
-						<Text style={styles.infoValue}>{email}</Text>
-					</View>
-				</>
-			)}
-		</>
+				</FadeInView>
+			</TouchableOpacity>
+			<TouchableOpacity onPress={handlePickImage} disabled={loadingUpload}>
+				<Text style={styles.editarFoto}>{loadingUpload ? "Subiendo imagen..." : "Editar foto"}</Text>
+			</TouchableOpacity>
+			{/* {errorUpload && <Text style={{ color: "red", textAlign: "center" }}>{errorUpload}</Text>}
+			{success && <Text style={{ color: "green", textAlign: "center" }}>¡Imagen actualizada!</Text>} */}
+			<View style={styles.infoRow}>
+				<View style={styles.iconAndLabelWrapper}>
+					<FontAwesome5 name="user" size={20} color="#222" style={styles.icon} solid />
+					<Text style={styles.infoLabel}>USUARIO:</Text>
+				</View>
+				<Text style={styles.infoValue}>{username}</Text>
+			</View>
+			<View style={styles.infoRow}>
+				<View style={styles.iconAndLabelWrapper}>
+					<FontAwesome5 name="envelope" size={20} color="#222" style={styles.icon} solid />
+					<Text style={styles.infoLabel}>CORREO:</Text>
+				</View>
+				<Text style={styles.infoValue}>{email}</Text>
+			</View>
+		</View>
 	);
-}
+};
+
+export default UserInfo;
 
 const styles = StyleSheet.create({
 	avatar: {
@@ -117,6 +152,12 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		fontSize: 16,
 		color: "#222",
+	},
+	centered: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 20,
 	},
 });
 

@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import StitchDesconfiado from "../assets/img/Stitch-Desconfiado.png";
 import PantallaDebeEstarLogueado from "./PantallaDebeEstarLogueado";
 import { useDispatch, useSelector } from "react-redux";
-import { setPendingAction } from "../store/slices/userSlice";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaDetallePelicula = ({ navigation, route }) => {
