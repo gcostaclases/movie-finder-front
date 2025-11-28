@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addReview } from "../services/reviewService";
 import { addMovieReview, updateReviewStats } from "../store/slices/movieSlice";
+import { addUserReview } from "../store/slices/userSlice";
 //#endregion ------------ IMPORTS ------------
 
 export default function useAddReview() {
@@ -20,6 +21,7 @@ export default function useAddReview() {
 			// console.log("Nueva reseña creada:", newReview);
 			dispatch(addMovieReview(newReview));
 			dispatch(updateReviewStats(newReview.movie.reviewStats));
+			dispatch(addUserReview(newReview));
 			setSuccess(true);
 		} catch (e) {
 			// Uso el error del backend sino uno genérico
@@ -35,3 +37,4 @@ export default function useAddReview() {
 
 	return { createReview, loading, error, success };
 }
+

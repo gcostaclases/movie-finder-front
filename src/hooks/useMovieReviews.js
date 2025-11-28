@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getReviewsByMovie } from "../services/reviewService";
-// import { setMovieReviews, resetMovieReviews } from "../store/slices/movieReviewsSlice";
 import { setMovieReviews, resetMovieReviews } from "../store/slices/movieSlice";
 //#endregion ------------ IMPORTS ------------
 

@@ -35,3 +35,9 @@ export async function uploadProfileImage(imageUri) {
 	});
 	return response.data; // { message, profileImage }
 }
+
+// Obtener reseñas del usuario autenticado
+export async function getUserReviews() {
+	const response = await api.get("/reviews/me");
+	return response.data; // Array de reseñas del usuario
+}

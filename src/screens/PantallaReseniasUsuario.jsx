@@ -1,96 +1,80 @@
 //#region ----------- IMPORTS ------------
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image } from "react-native";
 import { Rating } from "react-native-ratings";
+import { FontAwesome5 } from "@expo/vector-icons";
+import useUserReviews from "../hooks/useUserReviews";
+import { useSelector } from "react-redux";
 //#endregion ------------ IMPORTS ------------
 
-const reseñas = [
-	{
-		id: 1,
-		titulo: "Chainsaw Man – The Movie",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		estrellas: 3,
-		resena: "¡Está bastante bien!",
-	},
-	{
-		id: 2,
-		titulo: "Superman",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		estrellas: 5,
-		resena:
-			"Lorem ipsum dolor sit amet consectetur. Egestas nunc ut eros massa est massa. Volutpat sollicitudin hendrerit pulvinar non vestibulum sed eget habitant. Ipsum eros commodo amet diam. Volutpat volutpat eget pellentesque.",
-	},
-	{
-		id: 3,
-		titulo: "Twilight",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		estrellas: 1,
-		resena:
-			"Lorem ipsum dolor sit amet consectetur. Egestas nunc ut eros massa est massa. Volutpat sollicitudin hendrerit pulvinar non vestibulum sed eget habitant. Ipsum eros commodo amet diam. Volutpat volutpat eget pellentesque.",
-	},
-	{
-		id: 4,
-		titulo: "Chainsaw Man – The Movie",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		estrellas: 3,
-		resena: "¡Está bastante bien!",
-	},
-	{
-		id: 5,
-		titulo: "Superman",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		estrellas: 5,
-		resena:
-			"Lorem ipsum dolor sit amet consectetur. Egestas nunc ut eros massa est massa. Volutpat sollicitudin hendrerit pulvinar non vestibulum sed eget habitant. Ipsum eros commodo amet diam. Volutpat volutpat eget pellentesque.",
-	},
-];
+const ReseñaItem = ({ movie, rating, comment }) => {
+	const posterUrl = movie?.posterPath ? "https://image.tmdb.org/t/p/w500" + movie.posterPath : null;
+	const year = movie?.releaseDate ? movie.releaseDate.slice(0, 4) : "?";
+	const duration = movie?.duration ? `${movie.duration}min` : "?";
+	const director = movie?.directors && movie.directors.length > 0 ? movie.directors[0].name : "Desconocido";
 
-const ReseñaItem = ({ titulo, año, duracion, director, estrellas, resena }) => (
-	<View style={styles.row}>
-		<View style={styles.posterPlaceholder} />
-		<View style={styles.infoContainer}>
-			<View style={styles.headerRow}>
-				<Text style={styles.title} numberOfLines={1}>
-					{titulo}
+	return (
+		<View style={styles.row}>
+			{posterUrl ? (
+				<Image source={{ uri: posterUrl }} style={styles.poster} resizeMode="cover" />
+			) : (
+				<View style={styles.poster} />
+			)}
+			<View style={styles.infoContainer}>
+				<View style={styles.headerRow}>
+					<Text style={styles.title} numberOfLines={1}>
+						{movie?.title}
+					</Text>
+					<Rating
+						type="custom"
+						ratingCount={5}
+						imageSize={20}
+						readonly
+						startingValue={rating}
+						tintColor="#f3f3f3ff"
+						ratingBackgroundColor="#ccc"
+						style={styles.rating}
+					/>
+				</View>
+				<View style={styles.metaRow}>
+					<FontAwesome5 name="calendar" size={14} color="#555" />
+					<Text style={styles.metaText}>{year}</Text>
+					<FontAwesome5 name="clock" size={14} color="#555" style={{ marginLeft: 10 }} />
+					<Text style={styles.metaText}>{duration}</Text>
+				</View>
+				<Text style={styles.director}>
+					DIRECTOR: <Text style={{ fontWeight: "bold" }}>{director}</Text>
 				</Text>
-				<Rating
-					type="custom"
-					ratingCount={5}
-					imageSize={20}
-					readonly
-					startingValue={estrellas}
-					tintColor="#f3f3f3ff"
-					ratingBackgroundColor="#ccc"
-					style={styles.rating}
-				/>
+				<Text style={styles.review}>{comment}</Text>
 			</View>
-			<View style={styles.metaRow}>
-				<Text style={styles.metaText}>{año}</Text>
-				<Text style={styles.metaText}>·</Text>
-				<Text style={styles.metaText}>{duracion}</Text>
-			</View>
-			<Text style={styles.director}>
-				DIRECTOR: <Text style={{ fontWeight: "bold" }}>{director}</Text>
-			</Text>
-			<Text style={styles.review}>{resena}</Text>
 		</View>
-	</View>
-);
+	);
+};
 
 const PantallaReseniasUsuario = () => {
+	const { loading, error } = useUserReviews();
+
+	const reviews = useSelector((state) => state.user.reviews);
+
+	if (loading) {
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<ActivityIndicator size="large" color="#27AAE1" />
+			</View>
+		);
+	}
+
+	if (error) {
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text style={{ color: "red" }}>{error}</Text>
+			</View>
+		);
+	}
+
 	return (
 		<FlatList
-			data={reseñas}
-			keyExtractor={(item) => item.id.toString()}
+			data={reviews}
+			keyExtractor={(item) => item._id?.toString()}
 			renderItem={({ item }) => <ReseñaItem {...item} />}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
 			contentContainerStyle={styles.container}
@@ -115,17 +99,18 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 14,
 		paddingVertical: 12,
 	},
-	posterPlaceholder: {
+	poster: {
 		width: 70,
 		height: 105, // 70 * 1.5 = 105 para relación 2:3
-		borderRadius: 6,
-		backgroundColor: "#ccc",
+		borderRadius: 5,
 		marginRight: 14,
+		backgroundColor: "#ccc", // Para el placeholder
 	},
 	infoContainer: {
 		// backgroundColor: "#62c4d5ff",
 		flex: 1,
 		justifyContent: "flex-start",
+		// gap: 4,
 	},
 	headerRow: {
 		// backgroundColor: "#f4a261ff",
@@ -138,7 +123,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		fontSize: 16,
 		flex: 1,
-		marginRight: 8,
+		// marginRight: 8,
 		color: "#222",
 	},
 	rating: {
@@ -149,12 +134,14 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		marginBottom: 2,
-		gap: 2,
+		// gap: 2,
 	},
 	metaText: {
+		// backgroundColor: "#2a9d8fff",
 		fontSize: 13,
 		color: "#555",
-		marginRight: 6,
+		marginLeft: 3,
+		marginRight: 2,
 	},
 	director: {
 		// backgroundColor: "#a99a8dff",

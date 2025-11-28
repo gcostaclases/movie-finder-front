@@ -5,6 +5,7 @@ const initialState = {
 	email: "",
 	profileImage: null,
 	providers: [],
+	reviews: [],
 	isLogged: false,
 	selectedProviders: [],
 	movieReview: {
@@ -30,6 +31,12 @@ export const userSlice = createSlice({
 		},
 		setProviders: (state, action) => {
 			state.providers = action.payload;
+		},
+		addUserReview: (state, action) => {
+			state.reviews.unshift(action.payload); // La agrego al principio
+		},
+		setUserReviews: (state, action) => {
+			state.reviews = action.payload;
 		},
 		setMovieRating: (state, action) => {
 			state.movieReview.rating = action.payload;
@@ -70,6 +77,8 @@ export const {
 	loginUser,
 	logoutUser,
 	setProviders,
+	addUserReview,
+	setUserReviews,
 	setMovieRating,
 	resetMovieRating,
 	setMovieComment,

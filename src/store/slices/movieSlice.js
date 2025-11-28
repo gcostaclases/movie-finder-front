@@ -68,7 +68,8 @@ export const movieSlice = createSlice({
 			state.reviews = action.payload;
 		},
 		addMovieReview: (state, action) => {
-			state.reviews.push(action.payload);
+			// state.reviews.push(action.payload);
+			state.reviews.unshift(action.payload); // La agrego al principio
 		},
 		updateReviewStats: (state, action) => {
 			const { averageRating, totalReviews } = action.payload;
