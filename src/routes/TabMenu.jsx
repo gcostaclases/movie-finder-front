@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5 } from "@expo/vector-icons";
-import PantallaPeliculas from "../screens/PantallaPeliculas";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,6 +24,7 @@ const Menu = () => {
 		<Tab.Navigator
 			initialRouteName="MovieStack"
 			screenOptions={({ route }) => ({
+				// Icono para cada tab del menu
 				tabBarIcon: ({ focused, color, size }) => {
 					let iconName;
 					if (route.name === "AuthOrUserStack") {
@@ -112,7 +112,7 @@ const Menu = () => {
 				name="MovieStack"
 				component={MovieStack}
 				options={({ route }) => {
-					// Con esto detecto la pantalla activa y si es Login o Registro oculto el tab bar
+					// Con esto detecto la pantalla activa y si es el Detalle las Reseñas o los Actores oculto el tab bar
 					const routeName = getFocusedRouteNameFromRoute(route);
 					const hideTabHeader =
 						routeName === "PantallaDetallePelicula" ||
@@ -128,13 +128,9 @@ const Menu = () => {
 				name="SearchStack"
 				component={SearchStack}
 				options={({ route }) => {
-					// Con esto detecto la pantalla activa y si es Login o Registro oculto el tab bar
+					// Con esto detecto la pantalla activa y si es los Resultados de la Busqueda oculto el tab bar
 					const routeName = getFocusedRouteNameFromRoute(route);
-					// const hideTabHeader =
-					// 	routeName === "PantallaDetallePelicula" ||
-					// 	routeName === "PantallaReseniasPelicula" ||
-					// 	routeName === "PantallaActoresPelicula";
-					const hideTabHeader = false;
+					const hideTabHeader = routeName === "PantallaResultadosBusqueda";
 					return {
 						tabBarLabel: "Buscar",
 						headerShown: !hideTabHeader,

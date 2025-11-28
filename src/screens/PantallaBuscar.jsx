@@ -3,7 +3,7 @@ import ButtonPrimary from "../components/general/ButtonPrimary";
 import SearchField from "../components/search/SearchField";
 import { useState } from "react";
 
-const PantallaBuscar = () => {
+const PantallaBuscar = ({ route, navigation }) => {
 	const [titulo, setTitulo] = useState("");
 	const [actor, setActor] = useState("");
 	const [genero, setGenero] = useState("");
@@ -40,7 +40,13 @@ const PantallaBuscar = () => {
 				title="Buscar"
 				style={styles.button}
 				onPress={() => {
-					alert("Se esta buscando");
+					navigation.navigate("PantallaResultadosBusqueda", {
+						titulo,
+						actor,
+						genero,
+						idioma,
+						anio,
+					});
 				}}
 			/>
 		</View>

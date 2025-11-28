@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		borderWidth: 1,
 		borderColor: "#27AAE1",
+		// marginVertical: 15,
+		// backgroundColor: "#66cbb4ff",
 	},
 	tab: {
 		paddingVertical: 8,
@@ -49,4 +51,3 @@ const styles = StyleSheet.create({
 		color: "#fff",
 	},
 });
-

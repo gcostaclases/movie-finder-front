@@ -1,6 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import PantallaBuscar from "../screens/PantallaBuscar";
 import { LinearGradient } from "expo-linear-gradient";
+import PantallaResultadosBusqueda from "../screens/PantallaResultadosBusqueda";
+import ButtonGoBack from "../components/general/ButtonGoBack";
 
 const Stack = createStackNavigator();
 
@@ -29,8 +31,16 @@ const SearchStack = () => {
 					headerShown: false,
 				})}
 			/>
-			{/* <Stack.Screen name="PantallaLogin" component={PantallaLogin} /> */}
-			{/* <Stack.Screen name="PantallaRegistro" component={PantallaRegistro} /> */}
+			<Stack.Screen
+				name="PantallaResultadosBusqueda"
+				component={PantallaResultadosBusqueda}
+				options={({ route, navigation }) => ({
+					// headerTitle: route.params?.movieTitle || "Detalle",
+					// headerTitle: `${movieTitle || "Detalle"}`,
+					headerTitle: "Resultados de Búsqueda",
+					headerLeft: () => <ButtonGoBack navigation={navigation} size={28} />,
+				})}
+			/>
 		</Stack.Navigator>
 	);
 };

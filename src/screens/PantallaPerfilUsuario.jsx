@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
 		// backgroundColor: "#19ae2aff",
 		flex: 1,
 		alignItems: "center",
-		paddingTop: 30,
-		paddingBottom: 40,
+		paddingTop: 20,
+		// paddingBottom: 40,
 	},
 	buttonsContainer: {
 		width: "100%",

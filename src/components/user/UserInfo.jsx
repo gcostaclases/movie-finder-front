@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		// marginTop: 10,
 		alignSelf: "center",
-		backgroundColor: "#eee",
+		// backgroundColor: "#eee",
 	},
 	editarFoto: {
 		color: "#27AAE1",
