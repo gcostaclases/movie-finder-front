@@ -2,13 +2,14 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { store } from "../store/store";
 import { cerrarSesion } from "../utils/cerrarSesion";
+import { API_BASE_URL } from "@env";
 
 // Instancia principal
 const api = axios.create({
-	baseURL: "https://pelis-y-series-app.vercel.app/api/v1",
+	baseURL: API_BASE_URL,
 	headers: {
-		Accept: "application/json", // Esperamos JSON
-		// No seteamos Content-Type aquí
+		Accept: "application/json", // Espero JSON
+		// No seteo Content-Type aca porque supuestamente axios lo hace automáticamente
 	},
 	timeout: 60000, // 1 minuto
 });
@@ -37,10 +38,8 @@ api.interceptors.response.use(
 		const originalRequest = error.config;
 		if (error.response && error.response.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
-			// Si tu backend tiene refresh token, acá lo usarías.
-			// Si no, simplemente cerrás sesión (borrás el token y redirigís al login).
-			await cerrarSesion(store.dispatch); // Cierra sesión globalmente
-			// Podés despachar logoutUser si usás Redux, o redirigir al login.
+			// Cierro sesión (borro el token y datos de usuario del Secure Store y los datos del usuario de Redux).
+			await cerrarSesion(store.dispatch);
 			return Promise.reject(error);
 		}
 		return Promise.reject(error);
@@ -48,4 +47,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-

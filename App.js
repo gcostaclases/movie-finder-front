@@ -7,6 +7,7 @@ import TabMenu from "./src/routes/TabMenu";
 import useVerificarSesion from "./src/hooks/useVerificarSesion";
 import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Hago esto para usar el store acá porque preciso el Provider
 function MainApp() {
@@ -32,12 +33,14 @@ function MainApp() {
 
 export default function App() {
 	return (
-		<SafeAreaProvider>
-			<Provider store={store}>
-				<MainApp />
-				<ToastWithSafeArea />
-			</Provider>
-		</SafeAreaProvider>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<SafeAreaProvider>
+				<Provider store={store}>
+					<MainApp />
+					<ToastWithSafeArea />
+				</Provider>
+			</SafeAreaProvider>
+		</GestureHandlerRootView>
 	);
 }
 
@@ -56,3 +59,4 @@ const styles = StyleSheet.create({
 		// gap: 20,
 	},
 });
+
