@@ -1,8 +1,10 @@
+//#region ----------- IMPORTS ------------
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Rating } from "react-native-ratings";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
-import ButtonAnimatedAction from "../general/ButtonAnimatedAction";
+import ButtonSlideIn from "../general/ButtonSlideIn";
+//#endregion ------------ IMPORTS ------------
 
 const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 	const posterUrl = movie?.posterPath ? "https://image.tmdb.org/t/p/w500" + movie.posterPath : null;
@@ -12,8 +14,8 @@ const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 
 	const renderRightActions = (progress) => (
 		<View style={{ flexDirection: "row", height: "100%" }}>
-			<ButtonAnimatedAction label="Editar" color="#27AAE1" offset={80} onPress={onEdit} progress={progress} />
-			<ButtonAnimatedAction label="Eliminar" color="red" offset={160} onPress={onDelete} progress={progress} />
+			<ButtonSlideIn label="Editar" color="#27AAE1" offset={80} onPress={onEdit} progress={progress} />
+			<ButtonSlideIn label="Eliminar" color="red" offset={160} onPress={onDelete} progress={progress} />
 		</View>
 	);
 
