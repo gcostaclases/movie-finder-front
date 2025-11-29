@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-const SearchField = ({ label, placeholder, value, onChangeText, keyboardType = "default" }) => (
+const SearchField = ({ label, placeholder, value, onChangeText, keyboardType = "default", ...props }) => (
 	<>
 		<Text style={styles.label}>{label}</Text>
 		<View style={styles.inputRow}>
@@ -12,6 +12,7 @@ const SearchField = ({ label, placeholder, value, onChangeText, keyboardType = "
 				value={value}
 				onChangeText={onChangeText}
 				keyboardType={keyboardType}
+				{...props}
 			/>
 			<FontAwesome5 name="search" size={20} color="#7F7F7F" />
 		</View>
