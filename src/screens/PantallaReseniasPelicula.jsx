@@ -1,5 +1,5 @@
 //#region ----------- IMPORTS ------------
-import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator, TouchableOpacity, Alert } from "react-native";
 import { Rating } from "react-native-ratings";
 import useMovieReviews from "../hooks/useMovieReviews";
 import StitchExpectante from "../assets/img/Stitch-Expectante.png";
@@ -7,8 +7,12 @@ import StitchDesconfiado from "../assets/img/Stitch-Desconfiado.png";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import { useState, useEffect } from "react";
 import PantallaAgregarReseniaPelicula from "./PantallaAgregarReseniaPelicula";
-import { useSelector } from "react-redux";
+import PantallaEditarReseniaPelicula from "./PantallaEditarReseniaPelicula";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
+import useDeleteUserReview from "../hooks/useDeleteUserReview";
+import { setReviewToEditId } from "../store/slices/userSlice";
 //#endregion ----------- IMPORTS ------------
 
 const ReseñaItem = ({ user, rating, comment }) => (
@@ -37,15 +41,48 @@ const ReseñaItem = ({ user, rating, comment }) => (
 );
 
 const PantallaReseniasPelicula = ({ navigation, route }) => {
+	const dispatch = useDispatch();
+
+	// Obtengo el ID de la película desde el store
 	const movieId = useSelector((state) => state.movie.id);
 
-	// Custom hook que obtiene las reseñas
+	// Custom hook que obtiene las reseñas de la película
 	const { reviews, loading, error } = useMovieReviews(movieId);
 
+	// Custom hook para eliminar la reseña del usuario
+	const { deleteReview, loading: loadingDelete } = useDeleteUserReview();
+
+	const userReviews = useSelector((state) => state.user.reviews);
+	// console.log("userReviews:", userReviews);
+	const myReview = userReviews.find((r) => r.movie._id === movieId);
+	// console.log("myReview:", myReview);
+
 	const [modalAgregarReseniaVisible, setModalAgregarReseniaVisible] = useState(false);
+	const [modalEditarReseniaVisible, setModalEditarReseniaVisible] = useState(false);
 
 	const handleAgregarResenia = () => {
 		setModalAgregarReseniaVisible(true);
+	};
+
+	const handleEditarResenia = () => {
+		dispatch(setReviewToEditId(myReview._id));
+		setModalEditarReseniaVisible(true);
+	};
+
+	const handleEliminarResenia = () => {
+		Alert.alert("Eliminar reseña", "¿Seguro que querés eliminar tu reseña?", [
+			{ text: "Cancelar", style: "cancel" },
+			{
+				text: "Eliminar",
+				style: "destructive",
+				onPress: async () => {
+					const ok = await deleteReview(myReview._id);
+					if (ok) {
+						Toast.show({ type: "success", text1: "Reseña eliminada" });
+					}
+				},
+			},
+		]);
 	};
 
 	useEffect(() => {
@@ -100,16 +137,41 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 					</View>
 				}
 			/>
-			{/* Botón para agregar reseña - cuando hay listado de reseñas */}
-			{reviews.length > 0 && (
-				<TouchableOpacity style={styles.fab} activeOpacity={0.7} onPress={handleAgregarResenia}>
-					<FontAwesome5 name="plus" size={24} color="#fff" solid />
-				</TouchableOpacity>
+			{/* FABs para agregar, editar y eliminar reseña */}
+			{myReview ? (
+				<View style={styles.fabColumn}>
+					<TouchableOpacity
+						style={[styles.fabAction, { backgroundColor: "#27AAE1", marginBottom: 12 }]}
+						activeOpacity={0.7}
+						onPress={handleEditarResenia}>
+						<FontAwesome5 name="pen" size={22} color="#fff" solid />
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={[styles.fabAction, { backgroundColor: "#F7292D" }]}
+						activeOpacity={0.7}
+						onPress={handleEliminarResenia}
+						disabled={loadingDelete}>
+						<FontAwesome5 name="trash" size={22} color="#fff" solid />
+					</TouchableOpacity>
+				</View>
+			) : (
+				reviews.length > 0 && (
+					<TouchableOpacity
+						style={[styles.fab, { backgroundColor: "#27AE60" }]}
+						activeOpacity={0.7}
+						onPress={handleAgregarResenia}>
+						<FontAwesome5 name="plus" size={24} color="#fff" solid />
+					</TouchableOpacity>
+				)
 			)}
 
 			<PantallaAgregarReseniaPelicula
 				visible={modalAgregarReseniaVisible}
 				onClose={() => setModalAgregarReseniaVisible(false)}
+			/>
+			<PantallaEditarReseniaPelicula
+				visible={modalEditarReseniaVisible}
+				onClose={() => setModalEditarReseniaVisible(false)}
 			/>
 		</>
 	);
@@ -182,22 +244,66 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginBottom: 16,
 	},
+	// fab: {
+	// 	position: "absolute",
+	// 	// right: 24,
+	// 	// bottom: 32,
+	// 	width: 56,
+	// 	height: 56,
+	// 	borderRadius: 28,
+	// 	alignItems: "center",
+	// 	justifyContent: "center",
+	// 	elevation: 5, // sombra Android
+	// 	shadowColor: "#000", // sombra iOS
+	// 	shadowOffset: { width: 0, height: 2 },
+	// 	shadowOpacity: 0.3,
+	// 	shadowRadius: 4,
+	// 	zIndex: 10,
+	// },
+	// fabColumn: {
+	// 	position: "absolute",
+	// 	right: 24,
+	// 	bottom: 32,
+	// 	alignItems: "center",
+	// 	justifyContent: "flex-end",
+	// 	// height: 56 * 2 + 12, // opcional, para asegurar el espacio
+	// 	zIndex: 10,
+	// },
 	fab: {
 		position: "absolute",
 		right: 24,
 		bottom: 32,
-		backgroundColor: "#27AE60",
 		width: 56,
 		height: 56,
 		borderRadius: 28,
 		alignItems: "center",
 		justifyContent: "center",
-		elevation: 5, // sombra Android
-		shadowColor: "#000", // sombra iOS
+		elevation: 5,
+		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.3,
 		shadowRadius: 4,
 		zIndex: 10,
+	},
+	fabColumn: {
+		position: "absolute",
+		right: 24,
+		bottom: 32,
+		alignItems: "center",
+		zIndex: 10,
+	},
+	fabAction: {
+		width: 56,
+		height: 56,
+		borderRadius: 28,
+		alignItems: "center",
+		justifyContent: "center",
+		elevation: 5,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.3,
+		shadowRadius: 4,
+		marginBottom: 0,
 	},
 });
 

@@ -6,11 +6,13 @@ export async function getUserProviders() {
 	return response.data; // Array de proveedores
 }
 
+// Traer perfil del usuario autenticado
 export async function getUserProfile() {
 	const response = await api.get("/me/profile");
 	return response.data; // { username, email, profileImage }
 }
 
+// Agregar un proveedor a la lista del usuario autenticado
 export async function addUserProvider(providerId) {
 	const response = await api.post("/me/providers", { providerId });
 	return response.data; // { message: "..."}
@@ -42,6 +44,18 @@ export async function getUserReviews() {
 	return response.data; // Array de reseñas del usuario
 }
 
+// Editar reseña del usuario autenticado
+export async function editUserReview(reviewId, { rating, comment }) {
+	const response = await api.patch(`/reviews/${reviewId}`, { rating, comment });
+	return response.data; // Reseña actualizada
+}
+
+// Eliminar reseña del usuario autenticado
+export async function deleteUserReview(reviewId) {
+	const response = await api.delete(`/reviews/${reviewId}`);
+	return response.data; // { message: "Reseña eliminada correctamente" }
+}
+
 // Obtener la watchlist del usuario autenticado
 export async function getUserWatchlist({ page = 1, limit = 20 } = {}) {
 	const response = await api.get("/me/watchlist", { params: { page, limit } });
@@ -58,3 +72,4 @@ export async function addMovieToWatchlistService(movieId) {
 export async function removeMovieFromWatchlistService(movieId) {
 	return api.delete(`/me/watchlist/${movieId}`);
 }
+

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
-import { loginUser, logoutUser, setUserWatchlist, setProviders } from "../store/slices/userSlice";
-import { getUserWatchlist, getUserProviders } from "../services/userService";
+import { loginUser, logoutUser, setUserWatchlist, setProviders, setUserReviews } from "../store/slices/userSlice";
+import { getUserWatchlist, getUserProviders, getUserReviews } from "../services/userService";
 
 /*
   Cuando el usuario se loguea, guardo el token en el SecureStore y hago el dispatch en la pantalla de login.
@@ -42,7 +42,7 @@ export default function useVerificarSesion() {
 		verificarSesion();
 	}, [dispatch]);
 
-	// 2. Cuando la sesión está verificada, cargo watchlist y proveedores del usuario
+	// 2. Cuando la sesión está verificada, cargo watchlist, proveedores y reseñas del usuario
 	useEffect(() => {
 		const cargarDatosUsuario = async () => {
 			const token = await SecureStore.getItemAsync("userToken");
@@ -56,6 +56,10 @@ export default function useVerificarSesion() {
 				// Proveedores
 				const dataProviders = await getUserProviders();
 				dispatch(setProviders(dataProviders));
+
+				// Reseñas
+				const dataReviews = await getUserReviews();
+				dispatch(setUserReviews(dataReviews));
 			} catch (e) {
 				// Si da 401, el interceptor ya desloguea y limpia el store
 				if (e.response?.status !== 401) {
@@ -70,3 +74,4 @@ export default function useVerificarSesion() {
 
 	return isLoading;
 }
+

@@ -43,6 +43,10 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 	// console.log("Watchlist:", watchlist);
 	const isInWatchlist = watchlist.some((item) => item._id === movie?.id);
 	// console.log("isInWatchlist:", isInWatchlist);
+	const reviews = useSelector((state) => state.user.reviews);
+	// console.log("Reviews:", reviews);
+	const alreadyReviewed = reviews.some((r) => r.movie._id === movie?.id);
+	// console.log("alreadyReviewed:", alreadyReviewed);
 
 	// Estados para controlar la visibilidad de las modales
 	const [modalReportarDisponibilidadVisible, setModalReportarDisponibilidadVisible] = useState(false);
@@ -157,7 +161,11 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 						{/* Botón reportar disponibilidad */}
 						<ButtonPrimary title="Reportar disponibilidad" iconName="desktop" onPress={handleAbrirModalReportar} />
 						{/* Botón agregar reseña */}
-						<ButtonPrimary title="Agregar reseña" iconName="pen" onPress={handleAbrirModalResenia} />
+						<ButtonPrimary
+							title={alreadyReviewed ? "Editar reseña" : "Agregar reseña"}
+							iconName="pen"
+							onPress={handleAbrirModalResenia}
+						/>
 						{/* Botón agregar a watchlist o quitar de la watchlist */}
 						{isInWatchlist ? (
 							<ButtonSecondary
@@ -171,7 +179,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 							<ButtonSecondary
 								title={loadingAdd ? "Agregando..." : "Agregar a la watchlist"}
 								iconName="eye"
-								color="#1A7F37"
+								color="#27AE60"
 								onPress={handleAgregarWatchlist}
 								disabled={loadingAdd}
 							/>

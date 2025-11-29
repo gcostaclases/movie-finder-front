@@ -3,19 +3,55 @@ import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert } from "reac
 import useUserReviews from "../hooks/useUserReviews";
 import { useSelector } from "react-redux";
 import UserReviewItem from "../components/user/UserReviewItem";
+import useEditUserReview from "../hooks/useEditUserReview";
+import useDeleteUserReview from "../hooks/useDeleteUserReview";
+import Toast from "react-native-toast-message";
+import { useDispatch } from "react-redux";
+import { setReviewToEditId } from "../store/slices/userSlice";
+import PantallaEditarReseniaPelicula from "./PantallaEditarReseniaPelicula";
+import { useState } from "react";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaReseniasUsuario = ({ activeTab }) => {
+	const dispatch = useDispatch();
+
+	// Custom hook para obtener las reseñas del usuario
 	const { loading, error } = useUserReviews();
+
+	// Custom hook para editar reseñas del usuario
+	const { editReview, loading: loadingEdit, error: errorEdit, success: successEdit } = useEditUserReview();
+
+	// Custom hook para eliminar reseñas del usuario
+	const { deleteReview, loading: loadingDelete, error: errorDelete, success: successDelete } = useDeleteUserReview();
+
+	// Estado para controlar la visibilidad del modal de edición
+	const [modalEditVisible, setModalEditVisible] = useState(false);
 
 	const reviews = useSelector((state) => state.user.reviews);
 
 	const handleEdit = (item) => {
-		Alert.alert("Editar", `Editar reseña de "${item.movie.title}"`);
+		dispatch(setReviewToEditId(item._id));
+		setModalEditVisible(true);
+	};
+
+	const handleCloseEditModal = () => {
+		setModalEditVisible(false);
 	};
 
 	const handleDelete = (item) => {
-		Alert.alert("Eliminar", `Eliminar reseña de "${item.movie.title}"`);
+		Alert.alert("Eliminar", `¿Eliminar reseña de "${item.movie.title}"?`, [
+			{ text: "Cancelar", style: "cancel" },
+			{
+				text: "Eliminar",
+				style: "destructive",
+				onPress: async () => {
+					const ok = await deleteReview(item._id);
+					if (ok) {
+						Toast.show({ type: "success", text1: "Reseña eliminada" });
+					}
+				},
+			},
+		]);
 	};
 
 	if (loading) {
@@ -35,15 +71,19 @@ const PantallaReseniasUsuario = ({ activeTab }) => {
 	}
 
 	return (
-		<FlatList
-			data={reviews}
-			keyExtractor={(item) => item._id?.toString()}
-			renderItem={({ item }) => (
-				<UserReviewItem {...item} onEdit={() => handleEdit(item)} onDelete={() => handleDelete(item)} />
-			)}
-			ItemSeparatorComponent={() => <View style={styles.separator} />}
-			contentContainerStyle={styles.container}
-		/>
+		<>
+			<FlatList
+				data={reviews}
+				keyExtractor={(item) => item._id?.toString()}
+				renderItem={({ item }) => (
+					<UserReviewItem {...item} onEdit={() => handleEdit(item)} onDelete={() => handleDelete(item)} />
+				)}
+				ItemSeparatorComponent={() => <View style={styles.separator} />}
+				contentContainerStyle={styles.container}
+			/>
+
+			<PantallaEditarReseniaPelicula visible={modalEditVisible} onClose={handleCloseEditModal} />
+		</>
 	);
 };
 

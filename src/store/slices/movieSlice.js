@@ -71,6 +71,15 @@ export const movieSlice = createSlice({
 			// state.reviews.push(action.payload);
 			state.reviews.unshift(action.payload); // La agrego al principio
 		},
+		updateMovieReview: (state, action) => {
+			const idx = state.reviews.findIndex((r) => r._id === action.payload._id);
+			if (idx !== -1) {
+				state.reviews[idx] = action.payload;
+			}
+		},
+		removeMovieReview: (state, action) => {
+			state.reviews = state.reviews.filter((r) => r._id !== action.payload);
+		},
 		updateReviewStats: (state, action) => {
 			const { averageRating, totalReviews } = action.payload;
 			state.reviewStats.averageRating = averageRating;
@@ -95,6 +104,8 @@ export const {
 	setMovieDetail,
 	setMovieReviews,
 	addMovieReview,
+	updateMovieReview,
+	removeMovieReview,
 	updateReviewStats,
 	updateAvailability,
 	resetMovieDetail,

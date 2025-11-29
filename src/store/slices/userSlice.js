@@ -13,6 +13,7 @@ const initialState = {
 		rating: 0,
 		comment: "",
 	},
+	reviewToEditId: "",
 	movieAvailability: {
 		selectedProvider: null,
 	},
@@ -50,6 +51,15 @@ export const userSlice = createSlice({
 		setUserReviews: (state, action) => {
 			state.reviews = action.payload;
 		},
+		updateUserReview: (state, action) => {
+			const idx = state.reviews.findIndex((r) => r._id === action.payload._id);
+			if (idx !== -1) {
+				state.reviews[idx] = action.payload;
+			}
+		},
+		removeUserReview: (state, action) => {
+			state.reviews = state.reviews.filter((r) => r._id !== action.payload);
+		},
 		setMovieRating: (state, action) => {
 			state.movieReview.rating = action.payload;
 		},
@@ -61,6 +71,12 @@ export const userSlice = createSlice({
 		},
 		resetMovieComment: (state) => {
 			state.movieReview.comment = "";
+		},
+		setReviewToEditId: (state, action) => {
+			state.reviewToEditId = action.payload;
+		},
+		resetReviewToEditId: (state) => {
+			state.reviewToEditId = "";
 		},
 		setSelectedProviders: (state, action) => {
 			state.selectedProviders = action.payload;
@@ -94,10 +110,14 @@ export const {
 	removeMovieFromWatchlist,
 	addUserReview,
 	setUserReviews,
+	updateUserReview,
+	removeUserReview,
 	setMovieRating,
 	resetMovieRating,
 	setMovieComment,
 	resetMovieComment,
+	setReviewToEditId,
+	resetReviewToEditId,
 	setSelectedProviders,
 	resetSelectedProviders,
 	setSelectedProviderForMovie,
