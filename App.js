@@ -8,6 +8,7 @@ import useVerificarSesion from "./src/hooks/useVerificarSesion";
 import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import i18n from "./src/i18n/i18n";
 
 // Hago esto para usar el store acá porque preciso el Provider
 function MainApp() {

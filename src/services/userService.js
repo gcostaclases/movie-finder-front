@@ -41,3 +41,20 @@ export async function getUserReviews() {
 	const response = await api.get("/reviews/me");
 	return response.data; // Array de reseñas del usuario
 }
+
+// Obtener la watchlist del usuario autenticado
+export async function getUserWatchlist({ page = 1, limit = 20 } = {}) {
+	const response = await api.get("/me/watchlist", { params: { page, limit } });
+	return response.data; // { movies, total, page, limit }
+}
+
+// Agregar película a la watchlist del usuario autenticado
+export async function addMovieToWatchlistService(movieId) {
+	const response = await api.post("/me/watchlist", { movieId });
+	return response.data; // { message, movie }
+}
+
+// Eliminar película de la watchlist del usuario autenticado
+export async function removeMovieFromWatchlistService(movieId) {
+	return api.delete(`/me/watchlist/${movieId}`);
+}

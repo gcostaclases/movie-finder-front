@@ -1,27 +1,21 @@
 //#region ----------- IMPORTS ------------
-import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
-import ButtonPrimary from "../components/general/ButtonPrimary";
+import { StyleSheet, ScrollView } from "react-native";
 import ButtonSecondary from "../components/general/ButtonSecondary";
 import { useDispatch } from "react-redux";
 import { cerrarSesion } from "../utils/cerrarSesion";
 import UserInfo from "../components/user/UserInfo";
 import UserProviders from "../components/user/UserProviders";
-import { useState } from "react";
-import PantallaAgregarProveedorUsuario from "./PantallaAgregarProveedoresUsuario";
+import { useTranslation } from "react-i18next";
+import AppLanguage from "../components/user/AppLanguage";
 //#endregion ------------ IMPORTS ------------
 
-const PantallaPerfilUsuario = () => {
+const PantallaPerfilUsuario = ({ activeTab }) => {
 	const dispatch = useDispatch();
 
-	// Estados para controlar la visibilidad de las modales
-	const [modalEditarProveedoresVisible, setModalEditarProveedoresVisible] = useState(false);
+	const { t } = useTranslation();
 
 	const handleCerrarSesion = () => {
 		cerrarSesion(dispatch);
-	};
-
-	const handleAbrirModalEditarProveedores = () => {
-		setModalEditarProveedoresVisible(true);
 	};
 
 	return (
@@ -29,31 +23,22 @@ const PantallaPerfilUsuario = () => {
 			<ScrollView contentContainerStyle={styles.container}>
 				{/* Info de usuario */}
 				<UserInfo />
+
 				{/* Proveedores del usuario */}
 				<UserProviders />
-				{/* Botones */}
-				<View style={styles.buttonsContainer}>
-					<ButtonPrimary
-						title="Editar proveedores"
-						onPress={handleAbrirModalEditarProveedores}
-						iconName="edit"
-						style={{ width: "85%" }}
-					/>
-					<ButtonSecondary
-						title="Cerrar sesión"
-						onPress={handleCerrarSesion}
-						iconName="power-off"
-						color="#DC5658"
-						style={{ width: "85%" }}
-					/>
-				</View>
-			</ScrollView>
 
-			{/* Modal agregar proveedor */}
-			<PantallaAgregarProveedorUsuario
-				visible={modalEditarProveedoresVisible}
-				onClose={() => setModalEditarProveedoresVisible(false)}
-			/>
+				{/* Sección seleccionar idioma */}
+				<AppLanguage />
+
+				{/* Botón cerrar sesión */}
+				<ButtonSecondary
+					title={t("user.profile.logout")}
+					onPress={handleCerrarSesion}
+					iconName="power-off"
+					color="#F7292D"
+					style={{ width: "85%", marginVertical: 10 }}
+				/>
+			</ScrollView>
 		</>
 	);
 };
@@ -67,12 +52,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		paddingTop: 20,
 		// paddingBottom: 40,
-	},
-	buttonsContainer: {
-		width: "100%",
-		alignItems: "center",
-		gap: 15,
-		marginBottom: 15,
 	},
 });
 

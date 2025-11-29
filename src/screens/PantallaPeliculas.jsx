@@ -4,6 +4,7 @@ import useMovies from "../hooks/useMovies";
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import StitchDesconfiado from "../assets/img/Stitch-Desconfiado.png";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 // Dimensiones para calcular el tamaño de los posters
@@ -16,6 +17,8 @@ const posterHeight = Math.round(posterWidth * 1.5); // Proporción de poster
 const PantallaPeliculas = ({ navigation }) => {
 	// Custom hook para obtener películas
 	const { movies, loading, error, loadMore, hasMore } = useMovies(12);
+	// Traducciones
+	const { t } = useTranslation();
 
 	// Navegar al Detalle de la película
 	const irADetalle = (movie) => {
@@ -27,7 +30,7 @@ const PantallaPeliculas = ({ navigation }) => {
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error al cargar películas",
+				text1: t("movies.error_loading_movies"),
 				text2: error,
 			});
 		}
@@ -38,7 +41,7 @@ const PantallaPeliculas = ({ navigation }) => {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 				<ActivityIndicator size="large" color="#27AAE1" />
-				<Text>Cargando...</Text>
+				<Text>{t("generic.loading")}</Text>
 			</View>
 		);
 	}
@@ -60,7 +63,7 @@ const PantallaPeliculas = ({ navigation }) => {
 								/>
 							) : (
 								<View style={styles.noImage}>
-									<Text style={styles.noImageText}>Sin imagen</Text>
+									<Text style={styles.noImageText}>{t("generic.no_image")}</Text>
 								</View>
 							)}
 						</TouchableOpacity>
@@ -78,7 +81,7 @@ const PantallaPeliculas = ({ navigation }) => {
 						<View style={styles.emptyContainer}>
 							<Image source={StitchDesconfiado} style={styles.emptyImage} resizeMode="contain" />
 							<Text style={styles.emptyText}>
-								{error ? "Ocurrió un error al cargar las películas" : "No se encontraron películas"}
+								{error ? t("movies.error_loading_movies") : t("movies.no_movies_found")}
 							</Text>
 						</View>
 					)

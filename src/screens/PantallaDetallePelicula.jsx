@@ -13,6 +13,10 @@ import { useEffect, useState } from "react";
 import StitchDesconfiado from "../assets/img/Stitch-Desconfiado.png";
 import PantallaDebeEstarLogueado from "./PantallaDebeEstarLogueado";
 import { useDispatch, useSelector } from "react-redux";
+import useAddMovieToWatchlist from "../hooks/useAddMovieToWatchlist";
+import useRemoveMovieFromWatchlist from "../hooks/useRemoveMovieFromWatchlist";
+import Toast from "react-native-toast-message";
+import Separator from "../components/general/Separator";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaDetallePelicula = ({ navigation, route }) => {
@@ -23,7 +27,22 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 	// Custom hook para obtener los detalles de la película
 	const { movie, loading, error } = useMovieDetail(movieId);
 
+	// Custom hook para agregar película a la watchlist
+	const { addMovie, loading: loadingAdd, error: errorAdd, success } = useAddMovieToWatchlist();
+
+	// Custom hook para quitar película de la watchlist
+	const {
+		removeMovie,
+		loading: loadingRemove,
+		error: errorRemove,
+		success: successRemove,
+	} = useRemoveMovieFromWatchlist();
+
 	const isLogged = useSelector((state) => state.user.isLogged);
+	const watchlist = useSelector((state) => state.user.watchlist);
+	// console.log("Watchlist:", watchlist);
+	const isInWatchlist = watchlist.some((item) => item._id === movie?.id);
+	// console.log("isInWatchlist:", isInWatchlist);
 
 	// Estados para controlar la visibilidad de las modales
 	const [modalReportarDisponibilidadVisible, setModalReportarDisponibilidadVisible] = useState(false);
@@ -60,13 +79,49 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 		setModalAgregarReseniaVisible(true);
 	};
 
-	const handleAgregarWatchlist = () => {
+	const handleAgregarWatchlist = async () => {
 		if (!isLogged) {
 			setMensajeDebeEstarLogueado("Debes estar logueado para agregar a la watchlist.");
 			setModalDebeEstarLogueadoVisible(true);
 			return;
 		}
-		alert("Agregado a la watchlist");
+		if (!movie?.id) return;
+
+		const res = await addMovie(movie.id);
+
+		if (res && res.message) {
+			Toast.show({
+				type: "success",
+				text1: "Agregado a la watchlist",
+			});
+		} else if (errorAdd) {
+			Toast.show({
+				type: "error",
+				text1: errorAdd,
+			});
+		}
+	};
+
+	const handleQuitarWatchlist = async () => {
+		try {
+			const ok = await removeMovie(movie.id);
+			if (ok) {
+				Toast.show({
+					type: "success",
+					text1: "Quitado de la watchlist",
+				});
+			} else if (errorRemove) {
+				Toast.show({
+					type: "error",
+					text1: errorRemove,
+				});
+			}
+		} catch (e) {
+			Toast.show({
+				type: "error",
+				text1: "No se pudo quitar de la watchlist",
+			});
+		}
 	};
 
 	if (loading) {
@@ -103,21 +158,35 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 						<ButtonPrimary title="Reportar disponibilidad" iconName="desktop" onPress={handleAbrirModalReportar} />
 						{/* Botón agregar reseña */}
 						<ButtonPrimary title="Agregar reseña" iconName="pen" onPress={handleAbrirModalResenia} />
-						{/* Botón agregar a watchlist */}
-						<ButtonSecondary
-							title="Agregar a la watchlist"
-							iconName="eye"
-							color="#1A7F37"
-							onPress={handleAgregarWatchlist}
-						/>
+						{/* Botón agregar a watchlist o quitar de la watchlist */}
+						{isInWatchlist ? (
+							<ButtonSecondary
+								title="Quitar de la watchlist"
+								iconName="eye-slash"
+								color="#F7292D"
+								onPress={handleQuitarWatchlist}
+								disabled={loadingRemove}
+							/>
+						) : (
+							<ButtonSecondary
+								title={loadingAdd ? "Agregando..." : "Agregar a la watchlist"}
+								iconName="eye"
+								color="#1A7F37"
+								onPress={handleAgregarWatchlist}
+								disabled={loadingAdd}
+							/>
+						)}
 					</View>
 				</View>
+				<Separator />
 
 				{/* Puntaje */}
 				<MovieDetailRating />
+				<Separator />
 
 				{/* Proveedores */}
 				<MovieDetailProviders />
+				<Separator />
 
 				{/* Actores y Reseñas */}
 				<View style={[styles.container, { borderBottomWidth: 0 }]}>
@@ -172,8 +241,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 15,
 		// backgroundColor: "#e0acacff",
-		borderBottomColor: "#000000ff",
-		borderBottomWidth: 1,
+		// borderBottomColor: "#000000ff",
+		// borderBottomWidth: 1,
 	},
 	scrollContent: {
 		// padding: 16,

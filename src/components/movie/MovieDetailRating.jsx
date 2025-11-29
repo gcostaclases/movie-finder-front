@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 15,
 		// backgroundColor: "#e0acacff",
-		borderBottomColor: "#000000ff",
-		borderBottomWidth: 1,
+		// borderBottomColor: "#000000ff",
+		// borderBottomWidth: 1,
 	},
 	sectionTitle: {
 		fontWeight: "500",

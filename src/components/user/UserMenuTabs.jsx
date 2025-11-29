@@ -1,22 +1,31 @@
 //#region ----------- IMPORTS ------------
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
-const SECCIONES = ["Perfil", "Reseñas", "Watchlist"];
+const SECCIONES = [
+	{ key: "profile", label: "user.tab_menu.profile" },
+	{ key: "reviews", label: "user.tab_menu.reviews" },
+	{ key: "watchlist", label: "user.tab_menu.watchlist" },
+];
 
-const UserMenuTabs = ({ active, onChange }) => (
-	<View style={styles.tabsContainer}>
-		{SECCIONES.map((section) => (
-			<TouchableOpacity
-				key={section}
-				style={[styles.tab, active === section && styles.tabActive]}
-				onPress={() => onChange(section)}
-				activeOpacity={0.8}>
-				<Text style={[styles.tabText, active === section && styles.tabTextActive]}>{section}</Text>
-			</TouchableOpacity>
-		))}
-	</View>
-);
+const UserMenuTabs = ({ active, onChange }) => {
+	const { t } = useTranslation();
+
+	return (
+		<View style={styles.tabsContainer}>
+			{SECCIONES.map((section) => (
+				<TouchableOpacity
+					key={section.key}
+					style={[styles.tab, active === section.key && styles.tabActive]}
+					onPress={() => onChange(section.key)}
+					activeOpacity={0.8}>
+					<Text style={[styles.tabText, active === section.key && styles.tabTextActive]}>{t(section.label)}</Text>
+				</TouchableOpacity>
+			))}
+		</View>
+	);
+};
 
 export default UserMenuTabs;
 
@@ -51,3 +60,4 @@ const styles = StyleSheet.create({
 		color: "#fff",
 	},
 });
+

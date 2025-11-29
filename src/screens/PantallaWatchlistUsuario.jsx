@@ -1,82 +1,82 @@
 //#region ----------- IMPORTS ------------
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator, Alert } from "react-native";
+import useUserWatchlist from "../hooks/useUserWatchlist";
+import useRemoveMovieFromWatchlist from "../hooks/useRemoveMovieFromWatchlist";
+import UserMovieItem from "../components/user/UserMovieItem";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import StitchTriste from "../assets/img/Stitch-Triste.png";
+import Toast from "react-native-toast-message";
 //#endregion ------------ IMPORTS ------------
 
-const watchlist = [
-	{
-		id: 1,
-		titulo: "Chainsaw Man – The Movie: Reze Arc",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		overview:
-			"In a brutal war between devils, hunters, and secret enemies, a mysterious girl named Reze has stepped into Denji’s world, and he faces his deadliest battle yet, fueled by love in a world where survival knows no rules.",
-	},
-	{
-		id: 2,
-		titulo: "Superman",
-		año: 2025,
-		duracion: "100min",
-		director: "James Gunn",
-		overview:
-			"Superman faces a new threat to Earth while struggling with his own identity and the expectations of being a hero.",
-	},
-	{
-		id: 3,
-		titulo: "Twilight",
-		año: 2025,
-		duracion: "100min",
-		director: "Catherine Hardwicke",
-		overview: "A teenage girl risks everything when she falls in love with a vampire.",
-	},
-	{
-		id: 4,
-		titulo: "Chainsaw Man – The Movie: Reze Arc",
-		año: 2025,
-		duracion: "100min",
-		director: "Tatsuya Yoshihara",
-		overview:
-			"In a brutal war between devils, hunters, and secret enemies, a mysterious girl named Reze has stepped into Denji’s world, and he faces his deadliest battle yet, fueled by love in a world where survival knows no rules.",
-	},
-	{
-		id: 5,
-		titulo: "Superman",
-		año: 2025,
-		duracion: "100min",
-		director: "James Gunn",
-		overview:
-			"Superman faces a new threat to Earth while struggling with his own identity and the expectations of being a hero.",
-	},
-];
+const PantallaWatchlistUsuario = ({ activeTab }) => {
+	// Custom hook para obtener watchlist
+	const { movies, loading, error } = useUserWatchlist();
 
-const WatchlistItem = ({ titulo, año, duracion, director, overview }) => (
-	<View style={styles.row}>
-		<View style={styles.posterPlaceholder} />
-		<View style={styles.infoContainer}>
-			<View style={styles.headerRow}>
-				<Text style={styles.title} numberOfLines={1}>
-					{titulo}
-				</Text>
-			</View>
-			<View style={styles.metaRow}>
-				<Text style={styles.metaText}>{año}</Text>
-				<Text style={styles.metaText}>·</Text>
-				<Text style={styles.metaText}>{duracion}</Text>
-			</View>
-			<Text style={styles.director}>
-				DIRECTOR: <Text style={{ fontWeight: "bold" }}>{director}</Text>
-			</Text>
-			<Text style={styles.overview}>{overview}</Text>
-		</View>
-	</View>
-);
+	// Custom hook para remover película de watchlist
+	const { removeMovie, loading: loadingRemove, error: errorRemove } = useRemoveMovieFromWatchlist();
 
-const PantallaWatchlistUsuario = () => {
+	const watchlist = useSelector((state) => state.user.watchlist);
+
+	const { t } = useTranslation();
+
+	const handleDelete = (item) => {
+		Alert.alert(t("generic.remove"), t("user.watchlist.delete_confirm", { title: item.title }), [
+			{
+				text: t("generic.cancel"),
+				style: "cancel",
+			},
+			{
+				text: t("generic.remove"),
+				style: "destructive",
+				onPress: async () => {
+					const ok = await removeMovie(item._id);
+					if (ok) {
+						Toast.show({
+							type: "success",
+							text1: t("user.watchlist.deleting_success"),
+						});
+					} else if (errorRemove) {
+						Toast.show({
+							type: "error",
+							text1: errorRemove,
+						});
+					}
+				},
+			},
+		]);
+	};
+
+	if (loading) {
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<ActivityIndicator size="large" color="#27AAE1" />
+			</View>
+		);
+	}
+
+	if (error) {
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text style={{ color: "red" }}>{error}</Text>
+			</View>
+		);
+	}
+
+	if (watchlist.length === 0) {
+		return (
+			<View style={styles.emptyContainer}>
+				<Image source={StitchTriste} style={styles.emptyImage} resizeMode="contain" />
+				<Text style={styles.emptyText}>{t("user.watchlist.no_movies")}</Text>
+			</View>
+		);
+	}
+
 	return (
 		<FlatList
 			data={watchlist}
-			keyExtractor={(item) => item.id.toString()}
-			renderItem={({ item }) => <WatchlistItem {...item} />}
+			keyExtractor={(item) => item._id?.toString()}
+			renderItem={({ item }) => <UserMovieItem movie={item} onDelete={() => handleDelete(item)} />}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
 			contentContainerStyle={styles.container}
 		/>
@@ -94,65 +94,27 @@ const styles = StyleSheet.create({
 		// paddingTop: 10,
 		// paddingBottom: 30,
 	},
-	row: {
-		// backgroundColor: "#86d562ff",
-		flexDirection: "row",
-		paddingHorizontal: 14,
-		paddingVertical: 12,
-	},
-	posterPlaceholder: {
-		width: 70,
-		height: 105, // 70 * 1.5 = 105 para relación 2:3
-		borderRadius: 6,
-		backgroundColor: "#ccc",
-		marginRight: 14,
-	},
-	infoContainer: {
-		// backgroundColor: "#62c4d5ff",
-		flex: 1,
-		justifyContent: "flex-start",
-	},
-	headerRow: {
-		// backgroundColor: "#f4a261ff",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		marginBottom: 2,
-	},
-	title: {
-		fontWeight: "bold",
-		fontSize: 16,
-		flex: 1,
-		marginRight: 8,
-		color: "#222",
-	},
-	metaRow: {
-		// backgroundColor: "#e76f51ff",
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 2,
-		gap: 2,
-	},
-	metaText: {
-		fontSize: 13,
-		color: "#555",
-		marginRight: 6,
-	},
-	director: {
-		// backgroundColor: "#a99a8dff",
-		fontSize: 13,
-		color: "#222",
-		marginBottom: 2,
-	},
-	overview: {
-		// backgroundColor: "#6195f4ff",
-		fontSize: 14,
-		color: "#222",
-		marginTop: 2,
-	},
 	separator: {
 		height: 1,
 		backgroundColor: "#E0E0E0",
+	},
+	emptyContainer: {
+		// backgroundColor: "#c45f5fff",
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	emptyImage: {
+		width: 180,
+		height: 180,
+		marginBottom: 20,
+	},
+	emptyText: {
+		fontSize: 20,
+		color: "#222",
+		textAlign: "center",
+		fontWeight: "500",
+		marginBottom: 40, // Para subir un poco todo por el menu de arriba que da la sensación que no está centrado
 	},
 });
 

@@ -1,8 +1,11 @@
+//#region ----------- IMPORTS ------------
 import { View, Text, TouchableOpacity, Image, StyleSheet, Platform, ActivityIndicator } from "react-native";
 import useProviders from "../../hooks/useProviders";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedProviders } from "../../store/slices/userSlice";
+import { useTranslation } from "react-i18next";
+//#endregion ------------ IMPORTS ------------
 
 const UserAddProvider = () => {
 	const dispatch = useDispatch();
@@ -10,17 +13,18 @@ const UserAddProvider = () => {
 	// Custom hook para obtener proveedores
 	const { loading, error } = useProviders();
 
+	const { t } = useTranslation();
+
 	const providers = useSelector((state) => state.providers.providers);
 	const userProviders = useSelector((state) => state.user.providers);
 	const seleccionados = useSelector((state) => state.user.selectedProviders);
 
-	// Inicializa seleccionados con los proveedores de usuario solo si está vacío (seleccionados) y ademas si el usuario tiene proveedores
 	useEffect(() => {
 		if (seleccionados.length === 0 && userProviders.length > 0) {
 			const ids = userProviders.map((prov) => prov._id);
 			dispatch(setSelectedProviders(ids));
 		}
-	}, [userProviders, seleccionados.length, dispatch]);
+	}, []);
 
 	const toggleSelect = (id) => {
 		let nuevos;
@@ -36,7 +40,7 @@ const UserAddProvider = () => {
 		return (
 			<View style={styles.centered}>
 				<ActivityIndicator size="large" color="#27AAE1" />
-				<Text style={styles.loadingText}>Cargando proveedores...</Text>
+				<Text style={styles.loadingText}>{t("user.profile.providers.loading")}</Text>
 			</View>
 		);
 	}
@@ -52,7 +56,7 @@ const UserAddProvider = () => {
 	return (
 		<>
 			{/* Título */}
-			<Text style={styles.titulo}>¿Cuáles proveedores tienes contratados?</Text>
+			<Text style={styles.titulo}>{t("user.profile.providers.modal_title")}</Text>
 
 			{/* Proveedores */}
 			<View style={styles.proveedoresGrid}>

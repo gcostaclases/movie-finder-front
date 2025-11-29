@@ -1,13 +1,12 @@
 //#region ----------- IMPORTS ------------
 import { StyleSheet, Text, View, Image } from "react-native";
-import { Rating } from "react-native-ratings";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import ButtonSlideIn from "../general/ButtonSlideIn";
 import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
-const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
+const UserMovieItem = ({ movie, onDelete }) => {
 	const { t } = useTranslation();
 
 	const posterUrl = movie?.posterPath ? "https://image.tmdb.org/t/p/w500" + movie.posterPath : null;
@@ -18,17 +17,9 @@ const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 	const renderRightActions = (progress) => (
 		<View style={{ flexDirection: "row", height: "100%" }}>
 			<ButtonSlideIn
-				label={t("generic.edit")}
-				color="#27AAE1"
-				offset={80}
-				onPress={onEdit}
-				progress={progress}
-				iconName="pen"
-			/>
-			<ButtonSlideIn
-				label={t("generic.delete")}
+				label={t("generic.remove")}
 				color="#F7292D"
-				offset={160}
+				offset={80}
 				onPress={onDelete}
 				progress={progress}
 				iconName="trash"
@@ -49,16 +40,6 @@ const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 						<Text style={styles.title} numberOfLines={1}>
 							{movie?.title}
 						</Text>
-						<Rating
-							type="custom"
-							ratingCount={5}
-							imageSize={20}
-							readonly
-							startingValue={rating}
-							tintColor="#f3f3f3ff"
-							ratingBackgroundColor="#ccc"
-							style={styles.rating}
-						/>
 					</View>
 					<View style={styles.metaRow}>
 						<FontAwesome5 name="calendar" size={14} color="#555" />
@@ -70,14 +51,14 @@ const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 						{t("user.reviews.movies.director").toUpperCase() + ": "}
 						<Text style={{ fontWeight: "bold" }}>{director}</Text>
 					</Text>
-					<Text style={styles.review}>{comment}</Text>
+					<Text style={styles.overview}>{movie?.overview}</Text>
 				</View>
 			</View>
 		</Swipeable>
 	);
 };
 
-export default UserReviewItem;
+export default UserMovieItem;
 
 const styles = StyleSheet.create({
 	row: {
@@ -91,7 +72,7 @@ const styles = StyleSheet.create({
 		height: 105, // 70 * 1.5 = 105 para relación 2:3
 		borderRadius: 5,
 		marginRight: 14,
-		backgroundColor: "#ccc", // Para el placeholder
+		backgroundColor: "#ccc",
 	},
 	infoContainer: {
 		// backgroundColor: "#62c4d5ff",
@@ -113,9 +94,6 @@ const styles = StyleSheet.create({
 		// marginRight: 8,
 		color: "#222",
 	},
-	rating: {
-		alignSelf: "flex-end",
-	},
 	metaRow: {
 		// backgroundColor: "#e76f51ff",
 		flexDirection: "row",
@@ -136,7 +114,7 @@ const styles = StyleSheet.create({
 		color: "#222",
 		marginBottom: 2,
 	},
-	review: {
+	overview: {
 		// backgroundColor: "#6195f4ff",
 		fontSize: 14,
 		color: "#222",

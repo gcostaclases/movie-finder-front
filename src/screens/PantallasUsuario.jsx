@@ -8,34 +8,19 @@ import PantallaWatchlistUsuario from "./PantallaWatchlistUsuario";
 //#endregion ------------ IMPORTS ------------
 
 const PantallasUsuario = () => {
-	const [activeScreen, setActiveScreen] = useState("Perfil");
-
-	// const renderContent = () => {
-	// 	if (activeScreen === "Perfil") return <PantallaPerfilUsuario />;
-	// 	if (activeScreen === "Reseñas") return <PantallaReseniasUsuario />;
-	// 	if (activeScreen === "Watchlist") return <PantallaWatchlistUsuario />;
-	// };
-
-	// return (
-	// 	<View style={styles.container}>
-	// 		<UserMenuTabs active={activeScreen} onChange={setActiveScreen} />
-	// 		<ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-	// 			{renderContent()}
-	// 		</ScrollView>
-	// 	</View>
-	// );
+	const [activeScreen, setActiveScreen] = useState("profile");
 
 	return (
 		<View style={styles.container}>
 			<UserMenuTabs active={activeScreen} onChange={setActiveScreen} />
-			{activeScreen === "Perfil" ? (
+			{activeScreen === "profile" ? (
 				<ScrollView contentContainerStyle={styles.scrollContent}>
-					<PantallaPerfilUsuario />
+					<PantallaPerfilUsuario activeTab={activeScreen} />
 				</ScrollView>
-			) : activeScreen === "Reseñas" ? (
-				<PantallaReseniasUsuario />
+			) : activeScreen === "reviews" ? (
+				<PantallaReseniasUsuario activeTab={activeScreen} />
 			) : (
-				<PantallaWatchlistUsuario />
+				<PantallaWatchlistUsuario activeTab={activeScreen} />
 			)}
 		</View>
 	);

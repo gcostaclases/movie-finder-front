@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import UserReviewItem from "../components/user/UserReviewItem";
 //#endregion ------------ IMPORTS ------------
 
-const PantallaReseniasUsuario = () => {
+const PantallaReseniasUsuario = ({ activeTab }) => {
 	const { loading, error } = useUserReviews();
 
 	const reviews = useSelector((state) => state.user.reviews);

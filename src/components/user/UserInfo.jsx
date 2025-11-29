@@ -7,6 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import useUploadProfileImage from "../../hooks/useUploadProfileImage";
 import FadeInView from "../animations/FadeInView";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const USER_PLACEHOLDER = require("../../assets/img/User-Placeholder.png");
@@ -14,6 +15,8 @@ const USER_PLACEHOLDER = require("../../assets/img/User-Placeholder.png");
 const UserInfo = () => {
 	const { loading, error } = useUserProfile();
 	const { uploadImage, loading: loadingUpload, error: errorUpload, success } = useUploadProfileImage();
+
+	const { t } = useTranslation();
 
 	const username = useSelector((state) => state.user.username);
 	const email = useSelector((state) => state.user.email);
@@ -53,50 +56,42 @@ const UserInfo = () => {
 		);
 	}
 
-	// useEffect(() => {
-	// 	if (errorUpload) {
-	// 		Toast.show({
-	// 			type: "error",
-	// 			text1: "Error al subir la imagen",
-	// 			text2: errorUpload,
-	// 		});
-	// 	}
-	// }, [errorUpload]);
-
-	// useEffect(() => {
-	// 	if (success) {
-	// 		Toast.show({
-	// 			type: "success",
-	// 			text1: "¡Imagen actualizada!",
-	// 		});
-	// 	}
-	// }, [success]);
-
 	return (
 		<View>
+			{/* Imágen de perfil y botón para cambiarla */}
 			<TouchableOpacity onPress={handlePickImage} disabled={loadingUpload} activeOpacity={0.8}>
 				<FadeInView>
 					<Image source={profileImage ? { uri: profileImage } : USER_PLACEHOLDER} style={styles.avatar} />
 				</FadeInView>
 			</TouchableOpacity>
+
+			{/* Botón Editar Foto */}
 			<TouchableOpacity onPress={handlePickImage} disabled={loadingUpload}>
-				<Text style={styles.editarFoto}>{loadingUpload ? "Subiendo imagen..." : "Editar foto"}</Text>
+				<Text style={styles.editarFoto}>
+					{loadingUpload
+						? t("user.profile.picture.loading_profile_picture")
+						: t("user.profile.picture.edit_profile_picture")}
+				</Text>
 			</TouchableOpacity>
-			{/* {errorUpload && <Text style={{ color: "red", textAlign: "center" }}>{errorUpload}</Text>}
-			{success && <Text style={{ color: "green", textAlign: "center" }}>¡Imagen actualizada!</Text>} */}
-			<View style={styles.infoRow}>
-				<View style={styles.iconAndLabelWrapper}>
-					<FontAwesome5 name="user" size={20} color="#222" style={styles.icon} solid />
-					<Text style={styles.infoLabel}>USUARIO:</Text>
+
+			{/* Información de usuario */}
+			<View style={styles.infoWrapper}>
+				{/* Usuario */}
+				<View style={styles.infoRow}>
+					<View style={styles.iconAndLabelWrapper}>
+						<FontAwesome5 name="user" size={20} color="#222" style={styles.icon} solid />
+						<Text style={styles.infoLabel}>{t("user.profile.info.username") + ":"}</Text>
+					</View>
+					<Text style={styles.infoValue}>{username}</Text>
 				</View>
-				<Text style={styles.infoValue}>{username}</Text>
-			</View>
-			<View style={styles.infoRow}>
-				<View style={styles.iconAndLabelWrapper}>
-					<FontAwesome5 name="envelope" size={20} color="#222" style={styles.icon} solid />
-					<Text style={styles.infoLabel}>CORREO:</Text>
+				{/* Email */}
+				<View style={styles.infoRow}>
+					<View style={styles.iconAndLabelWrapper}>
+						<FontAwesome5 name="envelope" size={20} color="#222" style={styles.icon} solid />
+						<Text style={styles.infoLabel}>{t("user.profile.info.email") + ":"}</Text>
+					</View>
+					<Text style={styles.infoValue}>{email}</Text>
 				</View>
-				<Text style={styles.infoValue}>{email}</Text>
 			</View>
 		</View>
 	);
@@ -121,31 +116,36 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		textDecorationLine: "underline",
 	},
+	infoWrapper: {
+		// backgroundColor: "#f4a261ff",
+		width: "85%",
+	},
 	infoRow: {
 		// backgroundColor: "#e45757ff",
-		width: "85%",
+		width: "100%",
 		flexDirection: "row",
 		// alignItems: "center",
 		marginBottom: 8,
-		marginLeft: 10,
+		// marginLeft: 10,
 		justifyContent: "center",
 		gap: 10,
 	},
-	icon: {
-		marginRight: 10,
-	},
 	iconAndLabelWrapper: {
-		flex: 0.5,
+		// flex: 0.5,
 		// backgroundColor: "#7af461ff",
 		flexDirection: "row",
 		justifyContent: "flex-end",
 		alignItems: "center",
+	},
+	icon: {
+		marginRight: 10,
 	},
 	infoLabel: {
 		// backgroundColor: "#2a9d8fff",
 		fontWeight: "bold",
 		fontSize: 17,
 		color: "#222",
+		textTransform: "uppercase",
 	},
 	infoValue: {
 		flex: 1,

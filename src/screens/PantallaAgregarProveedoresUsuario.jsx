@@ -8,6 +8,7 @@ import { resetSelectedProviders } from "../store/slices/userSlice";
 import Toast from "react-native-toast-message";
 import UserAddProviders from "../components/user/UserAddProviders";
 import useAddUserProviders from "../hooks/useAddUserProviders";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaAgregarProveedorUsuario = ({ visible, onClose }) => {
@@ -15,6 +16,8 @@ const PantallaAgregarProveedorUsuario = ({ visible, onClose }) => {
 
 	// Custom hook para reportar disponibilidad
 	const { addProviders, loading, error, success } = useAddUserProviders();
+
+	const { t } = useTranslation();
 
 	const seleccionados = useSelector((state) => state.user.selectedProviders);
 
@@ -33,7 +36,7 @@ const PantallaAgregarProveedorUsuario = ({ visible, onClose }) => {
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error al reportar disponibilidad",
+				text1: t("user.profile.providers.editing_error"),
 				text2: error,
 			});
 		}
@@ -44,7 +47,7 @@ const PantallaAgregarProveedorUsuario = ({ visible, onClose }) => {
 		if (success) {
 			Toast.show({
 				type: "success",
-				text1: "¡Proveedores editados!",
+				text1: t("user.profile.providers.editing_success"),
 			});
 			handleClose();
 		}
@@ -62,7 +65,7 @@ const PantallaAgregarProveedorUsuario = ({ visible, onClose }) => {
 
 					{/* Botón Reportar */}
 					<ButtonPrimary
-						title="Editar"
+						title={t("user.profile.providers.edit_button")}
 						onPress={handleAddProviders}
 						style={{ width: "85%", marginTop: 10, opacity: seleccionados ? 1 : 0.5 }}
 						disabled={!seleccionados}

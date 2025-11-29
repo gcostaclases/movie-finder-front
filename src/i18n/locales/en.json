@@ -1,0 +1,101 @@
+{
+	"generic": {
+		"loading": "Loading...",
+		"no_image": "No image",
+		"unknown": "Unknown",
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"delete": "Delete",
+		"remove": "Remove",
+		"edit": "Edit"
+	},
+	"language": {
+		"es": "Spanish",
+		"en": "English"
+	},
+	"movies": {
+		"error_loading_movies": "An error occurred while loading movies",
+		"no_movies_found": "No movies found"
+	},
+	"user": {
+		"tab_menu": {
+			"profile": "Profile",
+			"reviews": "Reviews",
+			"watchlist": "Watchlist"
+		},
+		"profile": {
+			"picture": {
+				"edit_profile_picture": "Edit picture",
+				"loading_profile_picture": "Uploading image...",
+				"permission_denied_title": "Permission denied",
+				"permission_denied_message": "You need to grant permission to access the photo gallery."
+			},
+			"info": {
+				"username": "Username",
+				"email": "Email"
+			},
+			"providers": {
+				"title": "Providers",
+				"modal_title": "Which providers do you have subscribed?",
+				"button": "Manage providers",
+				"empty": "You have no providers added.",
+				"edit_button": "Edit",
+				"editing_error": "An error occurred while editing providers.",
+				"editing_success": "Providers successfully edited.",
+				"loading": "Loading providers..."
+			},
+			"language": {
+				"title": "App language",
+				"modal_title": "Select the desired language",
+				"button": "Select language"
+			},
+			"logout": "Log out"
+		},
+		"reviews": {
+			"movies": {
+				"director": "Director"
+			},
+			"no_reviews": "You have not written any reviews yet.",
+			"loading_reviews": "Loading reviews...",
+			"editing_error": "An error occurred while editing the review.",
+			"editing_success": "Review successfully edited.",
+			"deleting_error": "An error occurred while deleting the review.",
+			"deleting_success": "Review successfully deleted."
+		},
+		"watchlist": {
+			"no_movies": "Your watchlist is empty.",
+			"loading_watchlist": "Loading watchlist...",
+			"deleting_error": "An error occurred while removing the movie from the watchlist.",
+			"deleting_success": "Movie successfully removed.",
+			"delete_confirm": "Are you sure you want to remove \"{{title}}\" from your watchlist?"
+		}
+	},
+	"greeting": "Hello!",
+	"welcome_user": "Welcome, {{name}}",
+	"form": {
+		"title": "Person Registration",
+		"name": "Name",
+		"email": "Email",
+		"password": "Password",
+		"confirmPassword": "Confirm Password",
+		"birthDate": "Birth Date",
+		"country": "Country",
+		"department": "Department",
+		"terms": "Accept terms and conditions",
+		"submit": "Submit",
+		"selectDate": "Select Date",
+		"selectCountry": "Select a country",
+		"selectDepartment": "Select a department",
+		"es": "Spanish",
+		"en": "English"
+	},
+	"validation": {
+		"required": "This field is required",
+		"email": "Invalid email format",
+		"min": "Must be at least {{count}} characters",
+		"match": "Passwords must match",
+		"age": "You must be over 18",
+		"selectCountry": "Please select a country",
+		"terms": "You must accept the terms"
+	}
+}

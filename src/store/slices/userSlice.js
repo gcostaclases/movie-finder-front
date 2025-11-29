@@ -5,6 +5,7 @@ const initialState = {
 	email: "",
 	profileImage: null,
 	providers: [],
+	watchlist: [],
 	reviews: [],
 	isLogged: false,
 	selectedProviders: [],
@@ -31,6 +32,17 @@ export const userSlice = createSlice({
 		},
 		setProviders: (state, action) => {
 			state.providers = action.payload;
+		},
+		setUserWatchlist: (state, action) => {
+			state.watchlist = action.payload;
+		},
+		addMovieToWatchlist: (state, action) => {
+			state.watchlist.unshift(action.payload); // La agrego al principio
+		},
+		removeMovieFromWatchlist: (state, action) => {
+			state.watchlist = state.watchlist.filter(
+				(movie) => movie._id !== action.payload // (action.payload es el _id de la película)
+			);
 		},
 		addUserReview: (state, action) => {
 			state.reviews.unshift(action.payload); // La agrego al principio
@@ -77,6 +89,9 @@ export const {
 	loginUser,
 	logoutUser,
 	setProviders,
+	setUserWatchlist,
+	addMovieToWatchlist,
+	removeMovieFromWatchlist,
 	addUserReview,
 	setUserReviews,
 	setMovieRating,

@@ -1,0 +1,101 @@
+{
+	"generic": {
+		"loading": "Cargando...",
+		"no_image": "Sin imagen",
+		"unknown": "Desconocido",
+		"cancel": "Cancelar",
+		"confirm": "Confirmar",
+		"delete": "Eliminar",
+		"remove": "Quitar",
+		"edit": "Editar"
+	},
+	"language": {
+		"es": "Español",
+		"en": "Inglés"
+	},
+	"movies": {
+		"error_loading_movies": "Ocurrió un error al cargar las películas",
+		"no_movies_found": "No se encontraron películas"
+	},
+	"user": {
+		"tab_menu": {
+			"profile": "Perfil",
+			"reviews": "Reseñas",
+			"watchlist": "Watchlist"
+		},
+		"profile": {
+			"picture": {
+				"edit_profile_picture": "Editar foto",
+				"loading_profile_picture": "Subiendo imágen...",
+				"permission_denied_title": "Permiso denegado",
+				"permission_denied_message": "Necesitas otorgar permiso para acceder a la galería de fotos."
+			},
+			"info": {
+				"username": "Usuario",
+				"email": "Correo"
+			},
+			"providers": {
+				"title": "Proveedores",
+				"modal_title": "¿Cuáles proveedores tienes contratados?",
+				"button": "Editar proveedores",
+				"empty": "No tenés proveedores cargados.",
+				"edit_button": "Editar",
+				"editing_error": "Ocurrió un error al editar los proveedores.",
+				"editing_success": "Proveedores editados con éxito.",
+				"loading": "Cargando proveedores..."
+			},
+			"language": {
+				"title": "Idioma de la app",
+				"modal_title": "Seleccione el idioma deseado",
+				"button": "Seleccionar idioma"
+			},
+			"logout": "Cerrar sesión"
+		},
+		"reviews": {
+			"movies": {
+				"director": "Director"
+			},
+			"no_reviews": "Aún no has escrito ninguna reseña.",
+			"loading_reviews": "Cargando reseñas...",
+			"editing_error": "Ocurrió un error al editar la reseña.",
+			"editing_success": "Reseña editada con éxito.",
+			"deleting_error": "Ocurrió un error al eliminar la reseña.",
+			"deleting_success": "Reseña eliminada con éxito."
+		},
+		"watchlist": {
+			"no_movies": "Tu watchlist está vacía.",
+			"loading_watchlist": "Cargando watchlist...",
+			"deleting_error": "Ocurrió un error al eliminar la película de la watchlist.",
+			"deleting_success": "Película eliminada con éxito.",
+			"delete_confirm": "¿Está seguro que quiere quitar \"{{title}}\" de su watchlist?"
+		}
+	},
+	"greeting": "Hola!",
+	"welcome_user": "Bienvenido, {{name}}",
+	"form": {
+		"title": "Registro de Persona",
+		"name": "Nombre",
+		"email": "Correo",
+		"password": "Contraseña",
+		"confirmPassword": "Confirmar Contraseña",
+		"birthDate": "Fecha de Nacimiento",
+		"country": "País",
+		"department": "Departamento",
+		"terms": "Aceptar términos y condiciones",
+		"submit": "Enviar",
+		"selectDate": "Seleccionar Fecha",
+		"selectCountry": "Seleccione un país",
+		"selectDepartment": "Seleccione un departamento",
+		"es": "Español",
+		"en": "Inglés"
+	},
+	"validation": {
+		"required": "Este campo es obligatorio",
+		"email": "Formato de correo inválido",
+		"min": "Debe tener al menos {{count}} caracteres",
+		"match": "Las contraseñas deben coincidir",
+		"age": "Debes ser mayor de edad",
+		"selectCountry": "Selecciona un país",
+		"terms": "Debes aceptar los términos"
+	}
+}
