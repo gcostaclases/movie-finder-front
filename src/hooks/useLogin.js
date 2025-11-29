@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../services/authService";
 import * as SecureStore from "expo-secure-store";
 import { loginUser } from "../store/slices/userSlice";
+import { cargarDatosUsuario } from "../utils/cargarDatosUsuario";
 
 export default function useLogin() {
 	const dispatch = useDispatch();
@@ -36,6 +37,7 @@ export default function useLogin() {
 						profileImage: datos.user.profileImage,
 					})
 				);
+				await cargarDatosUsuario(dispatch);
 				return datos;
 			} else {
 				setError(datos.message);
@@ -63,4 +65,3 @@ export default function useLogin() {
 
 	return { handleLogin, loading, error, errorDetails, success };
 }
-

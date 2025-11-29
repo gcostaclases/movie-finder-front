@@ -64,7 +64,11 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 		setModalAgregarReseniaVisible(true);
 	};
 
+	// console.log("Revisiones de la película:", reviews);
+	// console.log("Mi reseña de la película:", myReview);
+
 	const handleEditarResenia = () => {
+		// console.log("Editar reseña ID:", myReview._id);
 		dispatch(setReviewToEditId(myReview._id));
 		setModalEditarReseniaVisible(true);
 	};

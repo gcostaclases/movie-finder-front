@@ -3,6 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
 import { loginUser, logoutUser, setUserWatchlist, setProviders, setUserReviews } from "../store/slices/userSlice";
 import { getUserWatchlist, getUserProviders, getUserReviews } from "../services/userService";
+import { cargarDatosUsuario } from "../utils/cargarDatosUsuario";
 
 /*
   Cuando el usuario se loguea, guardo el token en el SecureStore y hago el dispatch en la pantalla de login.
@@ -44,34 +45,10 @@ export default function useVerificarSesion() {
 
 	// 2. Cuando la sesión está verificada, cargo watchlist, proveedores y reseñas del usuario
 	useEffect(() => {
-		const cargarDatosUsuario = async () => {
-			const token = await SecureStore.getItemAsync("userToken");
-			if (!token) return; // Si no hay token, no hago nada
-
-			try {
-				// Watchlist
-				const dataWatchlist = await getUserWatchlist();
-				dispatch(setUserWatchlist(dataWatchlist.movies));
-
-				// Proveedores
-				const dataProviders = await getUserProviders();
-				dispatch(setProviders(dataProviders));
-
-				// Reseñas
-				const dataReviews = await getUserReviews();
-				dispatch(setUserReviews(dataReviews));
-			} catch (e) {
-				// Si da 401, el interceptor ya desloguea y limpia el store
-				if (e.response?.status !== 401) {
-					console.error("Error al cargar datos del usuario:", e);
-				}
-			}
-		};
 		if (!isLoading) {
-			cargarDatosUsuario();
+			cargarDatosUsuario(dispatch);
 		}
 	}, [isLoading, dispatch]);
 
 	return isLoading;
 }
-

@@ -35,6 +35,12 @@ const PantallaEditarReseniaPelicula = ({ visible, onClose }) => {
 	const rating = useSelector((state) => state.user.movieReview.rating);
 	const comment = useSelector((state) => state.user.movieReview.comment);
 
+	// console.log("PantallaEditarReseniaPelicula visible:", visible);
+	// console.log("reviewToEditId:", reviewId);
+	// console.log("review:", review);
+	// console.log("rating:", rating);
+	// console.log("comment:", comment);
+
 	// Para saber si hubo cambios
 	const hasChanges =
 		review &&
@@ -49,14 +55,9 @@ const PantallaEditarReseniaPelicula = ({ visible, onClose }) => {
 			dispatch(setMovieRating(review.rating));
 			dispatch(setMovieComment(review.comment));
 		}
-		// Al cerrar, reseteo
-		if (!visible) {
-			dispatch(resetMovieRating());
-			dispatch(resetMovieComment());
-			dispatch(resetReviewToEditId());
-		}
 	}, [visible, review, dispatch]);
 
+	// Al cerrar, reseteo
 	const handleClose = () => {
 		dispatch(resetMovieRating());
 		dispatch(resetMovieComment());
