@@ -3,6 +3,8 @@ export default {
 	expo: {
 		name: "movie-finder",
 		slug: "movie-finder",
+		owner: "gcostaclases",
+		icon: "./assets/Movie-Finder-Icon.png",
 		android: {
 			package: "com.tuempresa.clase",
 			softwareKeyboardLayoutMode: "pan",
