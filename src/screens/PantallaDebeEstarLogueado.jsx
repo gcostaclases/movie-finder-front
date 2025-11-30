@@ -2,21 +2,31 @@ import { Modal, View, Text, StyleSheet, Platform } from "react-native";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import ButtonSecondary from "../components/general/ButtonSecondary";
 import ButtonCloseModal from "../components/general/ButtonCloseModal";
+import { useTranslation } from "react-i18next";
 
-const PantallaDebeEstarLogueado = ({ visible, onClose, titulo, onLogin, onRegister }) => (
-	<Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-		<View style={styles.modalWrapper}>
-			<View style={styles.modalContainer}>
-				<ButtonCloseModal onPress={onClose} />
-				<Text style={styles.titulo}>{titulo}</Text>
-				<View style={styles.buttons}>
-					<ButtonPrimary title="Iniciar sesión" onPress={onLogin} color="#1A7F37" style={{ marginBottom: 15 }} />
-					<ButtonSecondary title="Registrarse" onPress={onRegister} />
+const PantallaDebeEstarLogueado = ({ visible, onClose, titulo, onLogin, onRegister }) => {
+	const { t } = useTranslation();
+
+	return (
+		<Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+			<View style={styles.modalWrapper}>
+				<View style={styles.modalContainer}>
+					<ButtonCloseModal onPress={onClose} />
+					<Text style={styles.titulo}>{titulo}</Text>
+					<View style={styles.buttons}>
+						<ButtonPrimary
+							title={t("auth.login_button")}
+							onPress={onLogin}
+							color="#1A7F37"
+							style={{ marginBottom: 15 }}
+						/>
+						<ButtonSecondary title={t("auth.register_button")} onPress={onRegister} />
+					</View>
 				</View>
 			</View>
-		</View>
-	</Modal>
-);
+		</Modal>
+	);
+};
 
 export default PantallaDebeEstarLogueado;
 

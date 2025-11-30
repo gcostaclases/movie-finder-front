@@ -1,7 +1,9 @@
+//#region ----------- IMPORTS ------------
 import { createStackNavigator } from "@react-navigation/stack";
 import PantallaLoginORegistro from "../screens/PantallaLoginORegistro";
 import PantallaLogin from "../screens/PantallaLogin";
 import PantallaRegistro from "../screens/PantallaRegistro";
+//#endregion ----------- IMPORTS ------------
 
 const Stack = createStackNavigator();
 
@@ -17,4 +19,3 @@ const AuthStack = () => {
 };
 
 export default AuthStack;
-

@@ -3,15 +3,57 @@ import { StyleSheet, Text, View } from "react-native";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import SearchField from "../components/search/SearchField";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { searchSchema } from "../forms/search.schema";
 import useMovieSearch from "../hooks/useMovieSearch";
 import { useState } from "react";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+//import { searchSchema } from "../forms/search.schema";
 import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
 const PantallaBuscar = ({ route, navigation }) => {
 	const { t } = useTranslation();
+
+	//#region SCHEMA YUP
+	// Helper para transformar "" en null
+	const normalizeEmptyStringToNull = (value, originalValue) => {
+		if (originalValue === "") return null;
+		return value;
+	};
+
+	// Método personalizado para que al menos se complete uno de los campos
+	function atLeastOneOf(list, t) {
+		return this.test({
+			name: "atLeastOneOf",
+			message: t("validation.at_least_one"),
+			exclusive: true,
+			params: { keys: list.join(", ") },
+			test: (value) => value != null && list.some((f) => !!value[f]),
+		});
+	}
+	// Agrego el método a Yup
+	if (!Yup.object.prototype.atLeastOneOf) {
+		Yup.addMethod(Yup.object, "atLeastOneOf", function (list) {
+			return atLeastOneOf.call(this, list, t);
+		});
+	}
+
+	const searchSchema = Yup.object()
+		.shape({
+			title: Yup.string().transform(normalizeEmptyStringToNull).max(100, t("validation.title_max")).nullable(),
+			actor: Yup.string().transform(normalizeEmptyStringToNull).max(100, t("validation.actor_max")).nullable(),
+			genre: Yup.string().transform(normalizeEmptyStringToNull).max(50, t("validation.genre_max")).nullable(),
+			language: Yup.string()
+				.transform(normalizeEmptyStringToNull)
+				.matches(/^[a-z]{2}$/, t("validation.language_pattern"))
+				.nullable(),
+			year: Yup.string()
+				.transform(normalizeEmptyStringToNull)
+				.matches(/^\d{4}$/, t("validation.year_pattern"))
+				.nullable(),
+		})
+		.atLeastOneOf(["title", "actor", "genre", "language", "year"]);
+	//#endregion SCHEMA YUP
 
 	const {
 		control,

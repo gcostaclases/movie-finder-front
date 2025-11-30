@@ -13,10 +13,44 @@
 		"es": "Español",
 		"en": "Inglés"
 	},
+	"auth": {
+		"login_button": "Iniciar sesión",
+		"register_button": "Registrarse",
+		"check_login": {
+			"must_be_logged_title": "Debes estar logueado para continuar."
+		},
+		"login": {
+			"title": "Iniciar sesión",
+			"identifier_placeholder": "Correo o nombre de usuario...",
+			"password_placeholder": "Contraseña...",
+			"success": "Login exitoso",
+			"error": "Error de inicio de sesión"
+		},
+		"register": {
+			"title": "Registrarme",
+			"email_placeholder": "Correo electrónico...",
+			"username_placeholder": "Nombre de usuario...",
+			"password_placeholder": "Contraseña...",
+			"verify_password_placeholder": "Verificar contraseña...",
+			"success": "Registro exitoso",
+			"error": "Error de registro"
+		}
+	},
 	"tab_menu": {
 		"user": "Usuario",
 		"movies": "Películas",
 		"search": "Buscar"
+	},
+	"navigation": {
+		"movie_stack": {
+			"detail": "Detalles de {{title}}",
+			"reviews": "Reseñas de {{title}}",
+			"actors": "Actores de {{title}}"
+		},
+		"search_stack": {
+			"header_title": "Resultados de Búsqueda"
+		},
+		"user_stack": {}
 	},
 	"movies": {
 		"error_loading_movies": "Hubo un error al cargar los datos de la película",
@@ -161,32 +195,25 @@
 		"release_year_placeholder": "Ej: 2025",
 		"search_button": "Buscar"
 	},
-	"greeting": "Hola!",
-	"welcome_user": "Bienvenido, {{name}}",
-	"form": {
-		"title": "Registro de Persona",
-		"name": "Nombre",
-		"email": "Correo",
-		"password": "Contraseña",
-		"confirmPassword": "Confirmar Contraseña",
-		"birthDate": "Fecha de Nacimiento",
-		"country": "País",
-		"department": "Departamento",
-		"terms": "Aceptar términos y condiciones",
-		"submit": "Enviar",
-		"selectDate": "Seleccionar Fecha",
-		"selectCountry": "Seleccione un país",
-		"selectDepartment": "Seleccione un departamento",
-		"es": "Español",
-		"en": "Inglés"
-	},
 	"validation": {
-		"required": "Este campo es obligatorio",
-		"email": "Formato de correo inválido",
-		"min": "Debe tener al menos {{count}} caracteres",
-		"match": "Las contraseñas deben coincidir",
-		"age": "Debes ser mayor de edad",
-		"selectCountry": "Selecciona un país",
-		"terms": "Debes aceptar los términos"
+		"identifier_required": "El email o nombre de usuario es obligatorio",
+		"identifier_invalid": "Debe ser un email válido o un nombre de usuario (3-20 caracteres)",
+		"password_required": "La contraseña es obligatoria",
+		"password_min": "La contraseña debe tener al menos 8 caracteres",
+		"password_max": "La contraseña no puede tener más de 30 caracteres",
+		"password_pattern": "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un símbolo",
+		"email_required": "El correo electrónico es obligatorio",
+		"email_invalid": "Debe ser un correo electrónico válido",
+		"username_required": "El nombre de usuario es obligatorio",
+		"username_min": "El nombre de usuario debe tener al menos 3 caracteres",
+		"username_max": "El nombre de usuario no puede tener más de 20 caracteres",
+		"verify_password_required": "Debes repetir la contraseña",
+		"verify_password_match": "Las contraseñas no coinciden",
+		"title_max": "El título es muy largo",
+		"actor_max": "El nombre del actor es muy largo",
+		"genre_max": "El género es muy largo",
+		"language_pattern": "Debe ser un código de idioma de 2 letras (ej: es, en)",
+		"year_pattern": "Debe ser un año de 4 dígitos",
+		"at_least_one": "Completá al menos un campo para buscar."
 	}
 }

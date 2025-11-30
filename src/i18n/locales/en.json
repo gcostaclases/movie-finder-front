@@ -13,10 +13,44 @@
 		"es": "Spanish",
 		"en": "English"
 	},
+	"auth": {
+		"login_button": "Log In",
+		"register_button": "Sign Up",
+		"check_login": {
+			"must_be_logged_title": "Login required to continue"
+		},
+		"login": {
+			"title": "Log In",
+			"identifier_placeholder": "Email or username...",
+			"password_placeholder": "Password...",
+			"success": "Login successful",
+			"error": "Login error"
+		},
+		"register": {
+			"title": "Sign Up",
+			"email_placeholder": "Email...",
+			"username_placeholder": "Username...",
+			"password_placeholder": "Password...",
+			"verify_password_placeholder": "Verify password...",
+			"success": "Registration successful",
+			"error": "Registration error"
+		}
+	},
 	"tab_menu": {
 		"user": "User",
 		"movies": "Movies",
 		"search": "Search"
+	},
+	"navigation": {
+		"movie_stack": {
+			"detail": "Details of {{title}}",
+			"reviews": "Reviews of {{title}}",
+			"actors": "Actors of {{title}}"
+		},
+		"search_stack": {
+			"header_title": "Search Results"
+		},
+		"user_stack": {}
 	},
 	"movies": {
 		"error_loading_movies": "An error occurred while loading movies",
@@ -161,32 +195,25 @@
 		"release_year_placeholder": "Eg: 2025",
 		"search_button": "Search"
 	},
-	"greeting": "Hello!",
-	"welcome_user": "Welcome, {{name}}",
-	"form": {
-		"title": "Person Registration",
-		"name": "Name",
-		"email": "Email",
-		"password": "Password",
-		"confirmPassword": "Confirm Password",
-		"birthDate": "Birth Date",
-		"country": "Country",
-		"department": "Department",
-		"terms": "Accept terms and conditions",
-		"submit": "Submit",
-		"selectDate": "Select Date",
-		"selectCountry": "Select a country",
-		"selectDepartment": "Select a department",
-		"es": "Spanish",
-		"en": "English"
-	},
 	"validation": {
-		"required": "This field is required",
-		"email": "Invalid email format",
-		"min": "Must be at least {{count}} characters",
-		"match": "Passwords must match",
-		"age": "You must be over 18",
-		"selectCountry": "Please select a country",
-		"terms": "You must accept the terms"
+		"identifier_required": "Email or username is required",
+		"identifier_invalid": "Must be a valid email or a username (3-20 characters)",
+		"password_required": "Password is required",
+		"password_min": "Password must be at least 8 characters",
+		"password_max": "Password cannot be more than 30 characters",
+		"password_pattern": "Password must have at least one uppercase, one lowercase, one number and one symbol",
+		"email_required": "Email is required",
+		"email_invalid": "Must be a valid email address",
+		"username_required": "Username is required",
+		"username_min": "Username must be at least 3 characters",
+		"username_max": "Username cannot be more than 20 characters",
+		"verify_password_required": "You must repeat the password",
+		"verify_password_match": "Passwords do not match",
+		"title_max": "Title is too long",
+		"actor_max": "Actor name is too long",
+		"genre_max": "Genre is too long",
+		"language_pattern": "Must be a 2-letter language code (e.g. es, en)",
+		"year_pattern": "Must be a 4-digit year",
+		"at_least_one": "Complete at least one field to search."
 	}
 }

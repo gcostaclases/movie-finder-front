@@ -1,5 +1,5 @@
 //#region ----------- IMPORTS ------------
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Image } from "react-native";
 import useUserReviews from "../hooks/useUserReviews";
 import { useSelector } from "react-redux";
 import UserReviewItem from "../components/user/UserReviewItem";
@@ -10,10 +10,14 @@ import { useDispatch } from "react-redux";
 import { setReviewToEditId } from "../store/slices/userSlice";
 import PantallaEditarReseniaPelicula from "./PantallaEditarReseniaPelicula";
 import { useState } from "react";
+import StitchTriste from "../assets/img/Stitch-Triste.png";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaReseniasUsuario = ({ activeTab }) => {
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation();
 
 	// Custom hook para obtener las reseñas del usuario
 	const { loading, error } = useUserReviews();
@@ -39,15 +43,15 @@ const PantallaReseniasUsuario = ({ activeTab }) => {
 	};
 
 	const handleDelete = (item) => {
-		Alert.alert("Eliminar", `¿Eliminar reseña de "${item.movie.title}"?`, [
-			{ text: "Cancelar", style: "cancel" },
+		Alert.alert(t("generic.delete"), t("user.reviews.delete_confirm", { title: item.movie.title }), [
+			{ text: t("generic.cancel"), style: "cancel" },
 			{
-				text: "Eliminar",
+				text: t("generic.delete"),
 				style: "destructive",
 				onPress: async () => {
 					const ok = await deleteReview(item._id);
 					if (ok) {
-						Toast.show({ type: "success", text1: "Reseña eliminada" });
+						Toast.show({ type: "success", text1: t("user.reviews.deleting_success") });
 					}
 				},
 			},
@@ -58,6 +62,7 @@ const PantallaReseniasUsuario = ({ activeTab }) => {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 				<ActivityIndicator size="large" color="#27AAE1" />
+				<Text>{t("user.reviews.loading_reviews")}</Text>
 			</View>
 		);
 	}
@@ -79,7 +84,13 @@ const PantallaReseniasUsuario = ({ activeTab }) => {
 					<UserReviewItem {...item} onEdit={() => handleEdit(item)} onDelete={() => handleDelete(item)} />
 				)}
 				ItemSeparatorComponent={() => <View style={styles.separator} />}
-				contentContainerStyle={styles.container}
+				contentContainerStyle={[styles.container, { flex: 1 }]}
+				ListEmptyComponent={
+					<View style={styles.emptyContainer}>
+						<Image source={StitchTriste} style={styles.emptyImage} resizeMode="contain" />
+						<Text style={styles.emptyText}>{t("user.reviews.no_reviews")}</Text>
+					</View>
+				}
 			/>
 
 			<PantallaEditarReseniaPelicula visible={modalEditVisible} onClose={handleCloseEditModal} />
@@ -101,6 +112,24 @@ const styles = StyleSheet.create({
 	separator: {
 		height: 1,
 		backgroundColor: "#E0E0E0",
+	},
+	emptyContainer: {
+		// backgroundColor: "#b33333ff",
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	emptyImage: {
+		width: 180,
+		height: 180,
+		marginBottom: 20,
+	},
+	emptyText: {
+		fontSize: 18,
+		color: "#222",
+		textAlign: "center",
+		fontWeight: "500",
+		marginBottom: 40,
 	},
 });
 

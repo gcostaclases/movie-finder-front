@@ -7,11 +7,14 @@ import PantallaReseniasPelicula from "../screens/PantallaReseniasPelicula";
 import PantallaActoresPelicula from "../screens/PantallaActoresPelicula";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const Stack = createStackNavigator();
 
 const MovieStack = () => {
+	const { t } = useTranslation();
+
 	const movieTitle = useSelector((state) => state.movie.title);
 	// console.log("Título de la película en MovieStack:", movieTitle);
 
@@ -44,7 +47,8 @@ const MovieStack = () => {
 				component={PantallaDetallePelicula}
 				options={({ route, navigation }) => ({
 					// headerTitle: route.params?.movieTitle || "Detalle",
-					headerTitle: `${movieTitle || "Detalle"}`,
+					// headerTitle: t("navigation.movie_stack.detail", { title: movieTitle }),
+					headerTitle: movieTitle,
 					headerLeft: () => <ButtonGoBack navigation={navigation} size={28} />,
 				})}
 			/>
@@ -52,7 +56,7 @@ const MovieStack = () => {
 				name="PantallaReseniasPelicula"
 				component={PantallaReseniasPelicula}
 				options={({ route, navigation }) => ({
-					headerTitle: `Reseñas de ${movieTitle || "Reseñas"}`,
+					headerTitle: t("navigation.movie_stack.reviews", { title: movieTitle }),
 					headerLeft: () => <ButtonGoBack navigation={navigation} size={28} />,
 				})}
 			/>
@@ -60,7 +64,7 @@ const MovieStack = () => {
 				name="PantallaActoresPelicula"
 				component={PantallaActoresPelicula}
 				options={({ route, navigation }) => ({
-					headerTitle: `Actores de ${movieTitle || "Actores"}`,
+					headerTitle: t("navigation.movie_stack.actors", { title: movieTitle }),
 					headerLeft: () => <ButtonGoBack navigation={navigation} size={28} />,
 				})}
 			/>

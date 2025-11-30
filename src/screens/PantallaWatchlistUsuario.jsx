@@ -3,10 +3,10 @@ import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator, Alert } fro
 import useUserWatchlist from "../hooks/useUserWatchlist";
 import useRemoveMovieFromWatchlist from "../hooks/useRemoveMovieFromWatchlist";
 import UserMovieItem from "../components/user/UserMovieItem";
-import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import StitchTriste from "../assets/img/Stitch-Triste.png";
 import Toast from "react-native-toast-message";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaWatchlistUsuario = ({ activeTab }) => {
@@ -63,22 +63,19 @@ const PantallaWatchlistUsuario = ({ activeTab }) => {
 		);
 	}
 
-	if (watchlist.length === 0) {
-		return (
-			<View style={styles.emptyContainer}>
-				<Image source={StitchTriste} style={styles.emptyImage} resizeMode="contain" />
-				<Text style={styles.emptyText}>{t("user.watchlist.no_movies")}</Text>
-			</View>
-		);
-	}
-
 	return (
 		<FlatList
 			data={watchlist}
 			keyExtractor={(item) => item._id?.toString()}
 			renderItem={({ item }) => <UserMovieItem movie={item} onDelete={() => handleDelete(item)} />}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
-			contentContainerStyle={styles.container}
+			contentContainerStyle={[styles.container, { flex: 1 }]}
+			ListEmptyComponent={
+				<View style={styles.emptyContainer}>
+					<Image source={StitchTriste} style={styles.emptyImage} resizeMode="contain" />
+					<Text style={styles.emptyText}>{t("user.watchlist.no_movies")}</Text>
+				</View>
+			}
 		/>
 	);
 };

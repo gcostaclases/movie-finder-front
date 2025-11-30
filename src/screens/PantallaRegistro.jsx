@@ -9,15 +9,38 @@ import useRegister from "../hooks/useRegister";
 import { Dimensions } from "react-native";
 import Toast from "react-native-toast-message";
 import { useForm, Controller } from "react-hook-form";
+import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signUpSchema } from "../forms/auth.schema";
+//import { signUpSchema } from "../forms/auth.schema";
+import { useTranslation } from "react-i18next";
+import { emailRegex, passwordRegex } from "../utils/regex";
 //#endregion ------------ IMPORTS ------------
 
 const windowHeight = Dimensions.get("window").height;
 
 const PantallaRegistro = ({ navigation }) => {
+	const { t } = useTranslation();
+
 	// Custom hook de registro
 	const { handleRegister, loading, error, errorDetails, success } = useRegister();
+
+	//#region SCHEMA YUP
+	const signUpSchema = Yup.object().shape({
+		email: Yup.string().required(t("validation.email_required")).matches(emailRegex, t("validation.email_invalid")),
+		username: Yup.string()
+			.required(t("validation.username_required"))
+			.min(3, t("validation.username_min"))
+			.max(20, t("validation.username_max")),
+		password: Yup.string()
+			.required(t("validation.password_required"))
+			.min(8, t("validation.password_min"))
+			.max(30, t("validation.password_max"))
+			.matches(passwordRegex, t("validation.password_pattern")),
+		verifyPassword: Yup.string()
+			.required(t("validation.verify_password_required"))
+			.oneOf([Yup.ref("password")], t("validation.verify_password_match")),
+	});
+	//#endregion SCHEMA YUP
 
 	// React Hook Form + Yup
 	const {
@@ -49,14 +72,14 @@ const PantallaRegistro = ({ navigation }) => {
 		if (success) {
 			Toast.show({
 				type: "success",
-				text1: "Registro exitoso",
+				text1: t("auth.register.success"),
 				text2: success,
 			});
 		}
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error de registro",
+				text1: t("auth.register.error"),
 				text2: error,
 			});
 		}
@@ -102,7 +125,7 @@ const PantallaRegistro = ({ navigation }) => {
 						render={({ field: { onChange, value } }) => (
 							<View style={styles.inputWrapper}>
 								<TextInputLoginSignUp
-									placeholder="Correo electrónico..."
+									placeholder={t("auth.register.email_placeholder")}
 									autoCapitalize="none"
 									value={value}
 									onChangeText={onChange}
@@ -118,7 +141,7 @@ const PantallaRegistro = ({ navigation }) => {
 						render={({ field: { onChange, value } }) => (
 							<View style={styles.inputWrapper}>
 								<TextInputLoginSignUp
-									placeholder="Nombre de usuario..."
+									placeholder={t("auth.register.username_placeholder")}
 									autoCapitalize="none"
 									value={value}
 									onChangeText={onChange}
@@ -134,7 +157,7 @@ const PantallaRegistro = ({ navigation }) => {
 						render={({ field: { onChange, value } }) => (
 							<View style={styles.inputWrapper}>
 								<TextInputLoginSignUp
-									placeholder="Contraseña..."
+									placeholder={t("auth.register.password_placeholder")}
 									secureTextEntry
 									autoCapitalize="none"
 									value={value}
@@ -151,7 +174,7 @@ const PantallaRegistro = ({ navigation }) => {
 						render={({ field: { onChange, value } }) => (
 							<View style={styles.inputWrapper}>
 								<TextInputLoginSignUp
-									placeholder="Verificar contraseña..."
+									placeholder={t("auth.register.verify_password_placeholder")}
 									secureTextEntry
 									autoCapitalize="none"
 									value={value}
@@ -163,7 +186,7 @@ const PantallaRegistro = ({ navigation }) => {
 					/>
 				</View>
 
-				{loading && <Text>Cargando...</Text>}
+				{loading && <Text>{t("generic.loading")}</Text>}
 
 				{(yupErrors.length > 0 || errorDetails.length > 0) && (
 					<View style={{ justifyContent: "center", alignItems: "flex-start", width: "85%" }}>
@@ -178,7 +201,7 @@ const PantallaRegistro = ({ navigation }) => {
 
 				{/* Botón primario sin ícono de registrarse */}
 				<ButtonPrimary
-					title="Registrarme"
+					title={t("auth.register_button")}
 					onPress={handleSubmit(onSubmit)}
 					style={{ width: "85%", marginTop: 20 }}
 					disabled={!isValid}

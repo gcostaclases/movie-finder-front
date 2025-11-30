@@ -1,12 +1,17 @@
+//#region ----------- IMPORTS ------------
 import { createStackNavigator } from "@react-navigation/stack";
 import PantallaBuscar from "../screens/PantallaBuscar";
 import { LinearGradient } from "expo-linear-gradient";
 import PantallaResultadosBusqueda from "../screens/PantallaResultadosBusqueda";
 import ButtonGoBack from "../components/general/ButtonGoBack";
+import { useTranslation } from "react-i18next";
+//#endregion ----------- IMPORTS ------------
 
 const Stack = createStackNavigator();
 
 const SearchStack = () => {
+	const { t } = useTranslation();
+
 	return (
 		<Stack.Navigator
 			initialRouteName="PantallaBuscar"
@@ -37,7 +42,7 @@ const SearchStack = () => {
 				options={({ route, navigation }) => ({
 					// headerTitle: route.params?.movieTitle || "Detalle",
 					// headerTitle: `${movieTitle || "Detalle"}`,
-					headerTitle: "Resultados de Búsqueda",
+					headerTitle: t("navigation.search_stack.header_title"),
 					headerLeft: () => <ButtonGoBack navigation={navigation} size={28} />,
 				})}
 			/>

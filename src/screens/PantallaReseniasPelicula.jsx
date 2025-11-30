@@ -20,6 +20,7 @@ import {
 	resetMovieComment,
 } from "../store/slices/userSlice";
 import { useTranslation } from "react-i18next";
+import PantallaDebeEstarLogueado from "./PantallaDebeEstarLogueado";
 //#endregion ----------- IMPORTS ------------
 
 const ReseñaItem = ({ user, rating, comment }) => (
@@ -68,11 +69,25 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 	// console.log("userReviews:", userReviews);
 	const myReview = userReviews.find((r) => r.movie._id === movieId);
 	// console.log("myReview:", myReview);
+	const isLogged = useSelector((state) => state.user.isLogged);
 
 	const [modalAgregarReseniaVisible, setModalAgregarReseniaVisible] = useState(false);
 	const [modalEditarReseniaVisible, setModalEditarReseniaVisible] = useState(false);
+	const [modalDebeEstarLogueadoVisible, setModalDebeEstarLogueadoVisible] = useState(false);
+	const [mensajeDebeEstarLogueado, setMensajeDebeEstarLogueado] = useState("");
+
+	// const handleAgregarResenia = () => {
+	// 	dispatch(resetMovieRating());
+	// 	dispatch(resetMovieComment());
+	// 	setModalAgregarReseniaVisible(true);
+	// };
 
 	const handleAgregarResenia = () => {
+		if (!isLogged) {
+			setMensajeDebeEstarLogueado(t("movies.review.must_be_logged"));
+			setModalDebeEstarLogueadoVisible(true);
+			return;
+		}
 		dispatch(resetMovieRating());
 		dispatch(resetMovieComment());
 		setModalAgregarReseniaVisible(true);
@@ -184,13 +199,40 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 				)
 			)}
 
+			{/* Modal agregar reseña */}
 			<PantallaAgregarReseniaPelicula
 				visible={modalAgregarReseniaVisible}
 				onClose={() => setModalAgregarReseniaVisible(false)}
 			/>
+
+			{/* Modal editar reseña */}
 			<PantallaEditarReseniaPelicula
 				visible={modalEditarReseniaVisible}
 				onClose={() => setModalEditarReseniaVisible(false)}
+			/>
+
+			{/* Modal debe estar logueado */}
+			<PantallaDebeEstarLogueado
+				visible={modalDebeEstarLogueadoVisible}
+				onClose={() => setModalDebeEstarLogueadoVisible(false)}
+				titulo={mensajeDebeEstarLogueado}
+				onLogin={() => {
+					setModalDebeEstarLogueadoVisible(false);
+					navigation.navigate("AuthOrUserStack", {
+						screen: "PantallaLogin",
+						params: {
+							returnStack: "MovieStack",
+							returnScreen: "PantallaReseniasPelicula",
+							returnParams: { movieId },
+						},
+					});
+				}}
+				onRegister={() => {
+					setModalDebeEstarLogueadoVisible(false);
+					navigation.navigate("AuthOrUserStack", {
+						screen: "PantallaRegistro",
+					});
+				}}
 			/>
 		</>
 	);
@@ -263,31 +305,6 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginBottom: 16,
 	},
-	// fab: {
-	// 	position: "absolute",
-	// 	// right: 24,
-	// 	// bottom: 32,
-	// 	width: 56,
-	// 	height: 56,
-	// 	borderRadius: 28,
-	// 	alignItems: "center",
-	// 	justifyContent: "center",
-	// 	elevation: 5, // sombra Android
-	// 	shadowColor: "#000", // sombra iOS
-	// 	shadowOffset: { width: 0, height: 2 },
-	// 	shadowOpacity: 0.3,
-	// 	shadowRadius: 4,
-	// 	zIndex: 10,
-	// },
-	// fabColumn: {
-	// 	position: "absolute",
-	// 	right: 24,
-	// 	bottom: 32,
-	// 	alignItems: "center",
-	// 	justifyContent: "flex-end",
-	// 	// height: 56 * 2 + 12, // opcional, para asegurar el espacio
-	// 	zIndex: 10,
-	// },
 	fab: {
 		position: "absolute",
 		right: 24,

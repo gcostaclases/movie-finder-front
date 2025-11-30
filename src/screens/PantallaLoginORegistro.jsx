@@ -2,8 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import MovieFinderLogoBlack from "../assets/logo/MovieFinderLogoBlack";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import ButtonSecondary from "../components/general/ButtonSecondary";
+import { useTranslation } from "react-i18next";
 
 const PantallaLoginORegistro = ({ navigation }) => {
+	const { t } = useTranslation();
+
 	// Navegar al Registro
 	const irARegistro = () => {
 		navigation.push("PantallaRegistro");
@@ -20,10 +23,10 @@ const PantallaLoginORegistro = ({ navigation }) => {
 
 			<View style={styles.buttonContainer}>
 				{/* Botón primario sin ícono */}
-				<ButtonPrimary title="Registrarme" onPress={irARegistro} />
+				<ButtonPrimary title={t("auth.register_button")} onPress={irARegistro} />
 
 				{/* Botón secundario sin ícono */}
-				<ButtonSecondary title="Iniciar sesión" color="#4CAF50" onPress={irALogin} />
+				<ButtonSecondary title={t("auth.login_button")} color="#27AE60" onPress={irALogin} />
 			</View>
 		</View>
 	);

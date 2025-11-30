@@ -9,15 +9,43 @@ import useLogin from "../hooks/useLogin";
 import { Dimensions } from "react-native";
 import Toast from "react-native-toast-message";
 import { useForm, Controller } from "react-hook-form";
+import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "../forms/auth.schema";
+//import { loginSchema } from "../forms/auth.schema";
+import { useTranslation } from "react-i18next";
+import { emailRegex, passwordRegex } from "../utils/regex";
 //#endregion ------------ IMPORTS ------------
 
 const windowHeight = Dimensions.get("window").height;
 
 const PantallaLogin = ({ route, navigation }) => {
+	const { t } = useTranslation();
+
 	// Custom hook de login
 	const { handleLogin, loading, error, errorDetails, success } = useLogin();
+
+	//#region SCHEMA YUP
+	const loginSchema = Yup.object().shape({
+		identifier: Yup.string()
+			.required(t("validation.identifier_required"))
+			// Creo una validación personalizada
+			.test(
+				"is-email-or-username", // Nombre interno
+				t("validation.identifier_invalid"), // Mensaje de error si falla
+				/*
+					 !!value: para asegurarse de que no es nulo o indefinido
+					 emailRegex.test(value): verifica si es un email válido
+					 (value.length >= 3 && value.length <= 20): verifica si es un nombre de usuario válido
+				*/
+				(value) => !!value && (emailRegex.test(value) || (value.length >= 3 && value.length <= 20))
+			),
+		password: Yup.string()
+			.required(t("validation.password_required"))
+			.min(8, t("validation.password_min"))
+			.max(30, t("validation.password_max"))
+			.matches(passwordRegex, t("validation.password_pattern")),
+	});
+	//#endregion SCHEMA YUP
 
 	// React Hook Form + Yup
 	const {
@@ -47,14 +75,14 @@ const PantallaLogin = ({ route, navigation }) => {
 		if (success) {
 			Toast.show({
 				type: "success",
-				text1: "Login exitoso",
+				text1: t("auth.login.success"),
 				text2: success,
 			});
 		}
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error de inicio de sesión",
+				text1: t("auth.login.error"),
 				text2: error,
 			});
 		}
@@ -105,7 +133,7 @@ const PantallaLogin = ({ route, navigation }) => {
 						render={({ field: { onChange, value } }) => (
 							<View style={styles.inputWrapper}>
 								<TextInputLoginSignUp
-									placeholder="Correo o nombre de usuario..."
+									placeholder={t("auth.login.identifier_placeholder")}
 									autoCapitalize="none"
 									value={value}
 									onChangeText={onChange}
@@ -121,7 +149,7 @@ const PantallaLogin = ({ route, navigation }) => {
 						render={({ field: { onChange, value } }) => (
 							<View style={styles.inputWrapper}>
 								<TextInputLoginSignUp
-									placeholder="Contraseña..."
+									placeholder={t("auth.login.password_placeholder")}
 									secureTextEntry
 									autoCapitalize="none"
 									value={value}
@@ -133,7 +161,7 @@ const PantallaLogin = ({ route, navigation }) => {
 					/>
 				</View>
 
-				{loading && <Text>Cargando...</Text>}
+				{loading && <Text>{t("generic.loading")}</Text>}
 
 				{(yupErrors.length > 0 || errorDetails.length > 0) && (
 					<View style={{ justifyContent: "center", alignItems: "flex-start", width: "80%" }}>
@@ -148,7 +176,7 @@ const PantallaLogin = ({ route, navigation }) => {
 
 				{/* Botón primario sin ícono de iniciar sesión */}
 				<ButtonPrimary
-					title="Iniciar sesión"
+					title={t("auth.login_button")}
 					onPress={handleSubmit(onSubmit)}
 					style={{ width: "85%", marginTop: 20 }}
 					disabled={!isValid}
