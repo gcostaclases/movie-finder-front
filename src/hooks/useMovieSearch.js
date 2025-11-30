@@ -13,7 +13,12 @@ export default function useMovieSearch() {
 		setLoading(true);
 		setError(null);
 		try {
-			const data = await getMoviesBySearch({ ...filters, page, limit });
+			// Limpio los filtros: elimino los campos vacíos, nulos o undefined
+			const cleanFilters = Object.fromEntries(
+				Object.entries(filters).filter(([, value]) => value !== null && value !== undefined && value !== "")
+			);
+
+			const data = await getMoviesBySearch({ ...cleanFilters, page, limit });
 			setResults(data.movies);
 			setTotal(data.total);
 			return data;
@@ -33,3 +38,4 @@ export default function useMovieSearch() {
 
 	return { results, total, loading, error, searchMovies };
 }
+

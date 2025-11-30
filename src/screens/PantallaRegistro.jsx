@@ -90,7 +90,7 @@ const PantallaRegistro = ({ navigation }) => {
 		// console.log("SUBMIT!", data);
 		const ok = await handleRegister({
 			email: data.email,
-			username: data.username,
+			username: data.username.trim().toLowerCase(),
 			password: data.password,
 		});
 		if (ok) {

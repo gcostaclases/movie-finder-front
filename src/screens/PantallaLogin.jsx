@@ -93,16 +93,22 @@ const PantallaLogin = ({ route, navigation }) => {
 
 	// Handler de submit del formulario
 	const onSubmit = async (data) => {
-		const datos = await handleLogin(data.identifier, data.password);
+		let identifier = data.identifier.trim();
+		if (!identifier.includes("@")) {
+			identifier = identifier.toLowerCase(); // Paso a minúsculas si es un username
+		}
+		const datos = await handleLogin(identifier, data.password);
 		if (datos && datos.token) {
 			reset(); // Reseteo el formulario
 			// console.log(returnStack, returnScreen, returnParams);
 			if (returnStack && returnScreen) {
+				console.log("Navegando a:", returnStack, returnScreen, returnParams);
 				navigation.navigate(returnStack, {
 					screen: returnScreen,
 					params: returnParams,
 				});
 			} else {
+				console.log("Navegando a MovieStack/PantallaPeliculas");
 				navigation.navigate("MovieStack", { screen: "PantallaPeliculas" });
 			}
 		}
