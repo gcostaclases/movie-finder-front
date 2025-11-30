@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 const Tab = createBottomTabNavigator();
 
 const Menu = () => {
-	// const insets = useSafeAreaInsets();
+	const insets = useSafeAreaInsets();
 	// const tabBarHeight = 70 + insets.bottom;
 	const tabBarHeight = Platform.OS === "ios" ? 95 : 85;
 
@@ -43,13 +43,29 @@ const Menu = () => {
 				},
 				tabBarStyle: {
 					backgroundColor: "#CCDEE5",
-					// height: 80,
-					height: tabBarHeight,
+
+					// Respeta safe area en Android
+					height: tabBarHeight + (Platform.OS === "android" ? insets.bottom : 0),
+					paddingBottom: Platform.OS === "android" ? insets.bottom : 0,
+
+					/*
+					// Respeta safe area en Android y iOS
+					height: tabBarHeight + insets.bottom,
+					paddingBottom: insets.bottom,
+					*/
 				},
 				tabBarItemStyle: {
 					// backgroundColor: "#2a96c1ff",
-					// height: 80,
-					height: tabBarHeight,
+
+					// Respeta safe area en Android
+					height: tabBarHeight + (Platform.OS === "android" ? insets.bottom : 0),
+					paddingBottom: Platform.OS === "android" ? insets.bottom : 0,
+
+					/*
+					// Respeta safe area en Android y iOS
+					height: tabBarHeight + insets.bottom,
+					paddingBottom: insets.bottom,
+					*/
 				},
 				tabBarIconStyle: {
 					// flex: 1,
@@ -147,3 +163,4 @@ const Menu = () => {
 };
 
 export default Menu;
+
