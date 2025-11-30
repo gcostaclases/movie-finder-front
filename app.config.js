@@ -16,5 +16,10 @@ export default {
 			],
 			"expo-localization",
 		],
+		extra: {
+			eas: {
+				projectId: "2d3b9f08-79dd-4fb7-bd02-1215732fc54d",
+			},
+		},
 	},
 };

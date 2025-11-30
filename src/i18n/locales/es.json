@@ -178,7 +178,7 @@
 			"one_result": "1 resultado",
 			"many_results": "{{count}} resultados",
 			"criteria_prefix": "Buscaste por",
-			"no_criteria": "sin criterios",
+			"no_criteria": "Sin criterios",
 			"no_results": "No se encontraron resultados",
 			"try_generic": "Prueba haciendo una búsqueda más genérica."
 		},

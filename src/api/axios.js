@@ -2,7 +2,8 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { store } from "../store/store";
 import { cerrarSesion } from "../utils/cerrarSesion";
-import { API_BASE_URL } from "@env";
+
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "";
 
 // Instancia principal
 const api = axios.create({
@@ -47,3 +48,4 @@ api.interceptors.response.use(
 );
 
 export default api;
+
