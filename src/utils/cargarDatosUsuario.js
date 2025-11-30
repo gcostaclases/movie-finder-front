@@ -10,21 +10,20 @@ export async function cargarDatosUsuario(dispatch) {
 		// Watchlist
 		const dataWatchlist = await getUserWatchlist();
 		dispatch(setUserWatchlist(dataWatchlist.movies));
-		console.log("Watchlist cargada:", dataWatchlist);
+		// console.log("Watchlist cargada:", dataWatchlist);
 
 		// Proveedores
 		const dataProviders = await getUserProviders();
 		dispatch(setProviders(dataProviders));
-		console.log("Proveedores cargados:", dataProviders);
+		// console.log("Proveedores cargados:", dataProviders);
 
 		// Reseñas
 		const dataReviews = await getUserReviews();
 		dispatch(setUserReviews(dataReviews));
-		console.log("Reseñas cargadas:", dataReviews);
+		// console.log("Reseñas cargadas:", dataReviews);
 	} catch (e) {
 		if (e.response?.status !== 401) {
 			console.error("Error al cargar datos del usuario:", e);
 		}
 	}
 }
-

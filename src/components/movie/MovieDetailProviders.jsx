@@ -1,8 +1,13 @@
+//#region ----------- IMPORTS ------------
 import { View, Text, Image, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import Separator from "../general/Separator";
+import { useTranslation } from "react-i18next";
+//#endregion ------------ IMPORTS ------------
 
 const MovieDetailProviders = () => {
+	const { t } = useTranslation();
+
 	const availability = useSelector((state) => state.movie.availability);
 	// console.log("Disponibilidad de proveedores:", availability);
 	const userProviders = useSelector((state) => state.user.providers);
@@ -11,8 +16,8 @@ const MovieDetailProviders = () => {
 	if (!availability || availability.length === 0) {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.sectionTitle}>Proveedores:</Text>
-				<Text style={styles.providerText}>No hay proveedores para esta película</Text>
+				<Text style={styles.sectionTitle}>{t("movies.availability.providers.providers")}</Text>
+				<Text style={styles.providerText}>{t("movies.availability.providers.no_providers")}</Text>
 			</View>
 		);
 	}
@@ -21,7 +26,7 @@ const MovieDetailProviders = () => {
 		// Usuario no logueado: solo muestro todos los proveedores
 		return (
 			<View style={styles.container}>
-				<Text style={styles.sectionTitle}>Proveedores:</Text>
+				<Text style={styles.sectionTitle}>{t("movies.availability.providers.providers")}</Text>
 				<View style={styles.providersRow}>
 					{availability.map((prov) => (
 						<View key={prov.providerId} style={styles.providerBox}>
@@ -41,10 +46,10 @@ const MovieDetailProviders = () => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.sectionTitle}>Tus proveedores</Text>
+			<Text style={styles.sectionTitle}>{t("movies.availability.providers.your_providers")}</Text>
 			<View style={styles.providersRow}>
 				{tusProveedores.length === 0 ? (
-					<Text style={styles.providerText}>Ninguno de tus proveedores tiene esta película</Text>
+					<Text style={styles.providerText}>{t("movies.availability.providers.your_providers_none")}</Text>
 				) : (
 					tusProveedores.map((prov) => (
 						<View key={prov.providerId} style={styles.providerBox}>
@@ -55,10 +60,10 @@ const MovieDetailProviders = () => {
 				)}
 			</View>
 			<Separator style={{ marginHorizontal: -15, marginTop: 20 }} />
-			<Text style={[styles.sectionTitle, { marginTop: 20 }]}>Otros proveedores</Text>
+			<Text style={[styles.sectionTitle, { marginTop: 20 }]}>{t("movies.availability.providers.other_providers")}</Text>
 			<View style={styles.providersRow}>
 				{otrosProveedores.length === 0 ? (
-					<Text style={styles.providerText}>No hay otros proveedores para esta película</Text>
+					<Text style={styles.providerText}>{t("movies.availability.providers.other_providers_none")}</Text>
 				) : (
 					otrosProveedores.map((prov) => (
 						<View key={prov.providerId} style={styles.providerBox}>

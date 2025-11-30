@@ -9,23 +9,29 @@ import useMovieDetail from "../hooks/useMovieDetail";
 import MovieDetailInfo from "../components/movie/MovieDetailInfo";
 import MovieDetailProviders from "../components/movie/MovieDetailProviders";
 import MovieDetailRating from "../components/movie/MovieDetailRating";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import StitchDesconfiado from "../assets/img/Stitch-Desconfiado.png";
 import PantallaDebeEstarLogueado from "./PantallaDebeEstarLogueado";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useAddMovieToWatchlist from "../hooks/useAddMovieToWatchlist";
 import useRemoveMovieFromWatchlist from "../hooks/useRemoveMovieFromWatchlist";
 import Toast from "react-native-toast-message";
 import Separator from "../components/general/Separator";
+import { useTranslation } from "react-i18next";
+import PantallaEditarReseniaPelicula from "./PantallaEditarReseniaPelicula";
+import { useDispatch } from "react-redux";
+import { setReviewToEditId, setMovieRating, setMovieComment } from "../store/slices/userSlice";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaDetallePelicula = ({ navigation, route }) => {
-	const movieId = route.params?.movieId;
-
 	const dispatch = useDispatch();
+
+	const movieId = route.params?.movieId;
 
 	// Custom hook para obtener los detalles de la película
 	const { movie, loading, error } = useMovieDetail(movieId);
+
+	const { t } = useTranslation();
 
 	// Custom hook para agregar película a la watchlist
 	const { addMovie, loading: loadingAdd, error: errorAdd, success } = useAddMovieToWatchlist();
@@ -51,6 +57,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 	// Estados para controlar la visibilidad de las modales
 	const [modalReportarDisponibilidadVisible, setModalReportarDisponibilidadVisible] = useState(false);
 	const [modalAgregarReseniaVisible, setModalAgregarReseniaVisible] = useState(false);
+	const [modalEditarReseniaVisible, setModalEditarReseniaVisible] = useState(false);
 	const [modalDebeEstarLogueadoVisible, setModalDebeEstarLogueadoVisible] = useState(false);
 	// Estado para el mensaje de la modal de que se debe estar logueado
 	const [mensajeDebeEstarLogueado, setMensajeDebeEstarLogueado] = useState("");
@@ -67,7 +74,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 
 	const handleAbrirModalReportar = () => {
 		if (!isLogged) {
-			setMensajeDebeEstarLogueado("Debes estar logueado para reportar la disponibilidad.");
+			setMensajeDebeEstarLogueado(t("movies.availability.must_be_logged"));
 			setModalDebeEstarLogueadoVisible(true);
 			return;
 		}
@@ -76,16 +83,27 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 
 	const handleAbrirModalResenia = () => {
 		if (!isLogged) {
-			setMensajeDebeEstarLogueado("Debes estar logueado para agregar una reseña.");
+			setMensajeDebeEstarLogueado(t("movies.review.must_be_logged"));
 			setModalDebeEstarLogueadoVisible(true);
 			return;
 		}
-		setModalAgregarReseniaVisible(true);
+		if (alreadyReviewed) {
+			// Busco la review del usuario para esta película
+			const myReview = reviews.find((r) => r.movie._id === movie?.id);
+			if (myReview) {
+				dispatch(setReviewToEditId(myReview._id));
+				dispatch(setMovieRating(myReview.rating));
+				dispatch(setMovieComment(myReview.comment));
+			}
+			setModalEditarReseniaVisible(true);
+		} else {
+			setModalAgregarReseniaVisible(true);
+		}
 	};
 
 	const handleAgregarWatchlist = async () => {
 		if (!isLogged) {
-			setMensajeDebeEstarLogueado("Debes estar logueado para agregar a la watchlist.");
+			setMensajeDebeEstarLogueado(t("movies.watchlist.must_be_logged"));
 			setModalDebeEstarLogueadoVisible(true);
 			return;
 		}
@@ -96,7 +114,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 		if (res && res.message) {
 			Toast.show({
 				type: "success",
-				text1: "Agregado a la watchlist",
+				text1: t("movies.watchlist.added"),
 			});
 		} else if (errorAdd) {
 			Toast.show({
@@ -112,7 +130,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 			if (ok) {
 				Toast.show({
 					type: "success",
-					text1: "Quitado de la watchlist",
+					text1: t("movies.watchlist.removed"),
 				});
 			} else if (errorRemove) {
 				Toast.show({
@@ -123,7 +141,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 		} catch (e) {
 			Toast.show({
 				type: "error",
-				text1: "No se pudo quitar de la watchlist",
+				text1: t("movies.watchlist.error_remove"),
 			});
 		}
 	};
@@ -132,7 +150,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 				<ActivityIndicator size="large" color="#27AAE1" />
-				<Text>Cargando...</Text>
+				<Text>{t("generic.loading")}</Text>
 			</View>
 		);
 	}
@@ -142,7 +160,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
 				<Image source={StitchDesconfiado} style={{ width: 180, height: 180, marginBottom: 24 }} resizeMode="contain" />
 				<Text style={{ color: "#222", fontSize: 20, textAlign: "center", fontWeight: "500" }}>
-					Hubo un error al cargar los datos de la película
+					{t("movies.error_loading_movies")}
 				</Text>
 			</View>
 		);
@@ -159,17 +177,21 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 					{/* Botones principales */}
 					<View style={styles.buttonsContainer}>
 						{/* Botón reportar disponibilidad */}
-						<ButtonPrimary title="Reportar disponibilidad" iconName="desktop" onPress={handleAbrirModalReportar} />
+						<ButtonPrimary
+							title={t("movies.availability.report")}
+							iconName="desktop"
+							onPress={handleAbrirModalReportar}
+						/>
 						{/* Botón agregar reseña */}
 						<ButtonPrimary
-							title={alreadyReviewed ? "Editar reseña" : "Agregar reseña"}
+							title={alreadyReviewed ? t("movies.review.edit") : t("movies.review.add")}
 							iconName="pen"
 							onPress={handleAbrirModalResenia}
 						/>
 						{/* Botón agregar a watchlist o quitar de la watchlist */}
 						{isInWatchlist ? (
 							<ButtonSecondary
-								title="Quitar de la watchlist"
+								title={t("movies.watchlist.remove")}
 								iconName="eye-slash"
 								color="#F7292D"
 								onPress={handleQuitarWatchlist}
@@ -177,7 +199,7 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 							/>
 						) : (
 							<ButtonSecondary
-								title={loadingAdd ? "Agregando..." : "Agregar a la watchlist"}
+								title={loadingAdd ? t("movies.watchlist.adding") : t("movies.watchlist.add")}
 								iconName="eye"
 								color="#27AE60"
 								onPress={handleAgregarWatchlist}
@@ -199,8 +221,8 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 				{/* Actores y Reseñas */}
 				<View style={[styles.container, { borderBottomWidth: 0 }]}>
 					<View style={styles.cardButtonContainer}>
-						<ButtonCard iconName="users" text="Actores" onPress={irAActores} />
-						<ButtonCard iconName="newspaper" text="Reseñas" onPress={irAResenias} />
+						<ButtonCard iconName="users" text={t("movies.actors.actors")} onPress={irAActores} />
+						<ButtonCard iconName="newspaper" text={t("movies.reviews.reviews")} onPress={irAResenias} />
 					</View>
 				</View>
 			</ScrollView>
@@ -210,11 +232,19 @@ const PantallaDetallePelicula = ({ navigation, route }) => {
 				visible={modalReportarDisponibilidadVisible}
 				onClose={() => setModalReportarDisponibilidadVisible(false)}
 			/>
+
 			{/* Modal Agregar Reseña */}
 			<PantallaAgregarReseniaPelicula
 				visible={modalAgregarReseniaVisible}
 				onClose={() => setModalAgregarReseniaVisible(false)}
 			/>
+
+			{/* Modal Editar Reseña */}
+			<PantallaEditarReseniaPelicula
+				visible={modalEditarReseniaVisible}
+				onClose={() => setModalEditarReseniaVisible(false)}
+			/>
+
 			{/* Modal Debe estar logueado */}
 			<PantallaDebeEstarLogueado
 				visible={modalDebeEstarLogueadoVisible}

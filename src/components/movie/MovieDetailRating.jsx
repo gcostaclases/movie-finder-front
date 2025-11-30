@@ -2,15 +2,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Rating } from "react-native-ratings";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const MovieDetailRating = () => {
 	const averageRating = useSelector((state) => state.movie.reviewStats.averageRating);
 	// console.log("Puntaje promedio de la película:", averageRating);
 
+	const { t } = useTranslation();
+
 	return (
 		<View style={styles.container}>
-			<Text style={styles.sectionTitle}>PUNTAJE</Text>
+			<Text style={styles.sectionTitle}>{t("movies.rating")}</Text>
 			<View style={styles.ratingRow}>
 				<Rating
 					type="custom"
@@ -46,6 +49,7 @@ const styles = StyleSheet.create({
 		fontWeight: "500",
 		fontSize: 15,
 		marginBottom: 15,
+		textTransform: "uppercase",
 	},
 	ratingRow: {
 		flexDirection: "row",

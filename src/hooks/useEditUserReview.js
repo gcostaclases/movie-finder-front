@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { editUserReview } from "../services/userService";
 import { updateUserReview } from "../store/slices/userSlice";
-import { updateMovieReview } from "../store/slices/movieSlice";
+import { updateMovieReview, updateReviewStats } from "../store/slices/movieSlice";
 //#endregion ------------ IMPORTS ------------
 
 export default function useEditUserReview() {
@@ -21,6 +21,7 @@ export default function useEditUserReview() {
 			const updated = await editUserReview(reviewId, { rating, comment });
 			dispatch(updateUserReview(updated));
 			dispatch(updateMovieReview(updated));
+			dispatch(updateReviewStats(updated.movie.reviewStats));
 			setSuccess(true);
 			return updated;
 		} catch (e) {

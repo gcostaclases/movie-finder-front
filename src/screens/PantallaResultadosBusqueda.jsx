@@ -1,28 +1,35 @@
+//#region ----------- IMPORTS ------------
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import MovieResultItem from "../components/search/MovieResultItem";
 import StitchTriste from "../assets/img/Stitch-Triste.png";
 import { Image } from "react-native";
+import { useTranslation } from "react-i18next";
+//#endregion ----------- IMPORTS ------------
 
-function getCriterioBusqueda(filters) {
+function getCriterioBusqueda(filters, t) {
 	const criterios = [];
-	if (filters.title) criterios.push(`título: "${filters.title}"`);
-	if (filters.actor) criterios.push(`actor: "${filters.actor}"`);
-	if (filters.genre) criterios.push(`género: "${filters.genre}"`);
-	if (filters.language) criterios.push(`idioma: "${filters.language}"`);
-	if (filters.year) criterios.push(`año: "${filters.year}"`);
-	if (criterios.length === 0) return "sin criterios";
+	if (filters.title) criterios.push(`${t("search.title").toLowerCase()}: "${filters.title}"`);
+	if (filters.actor) criterios.push(`${t("search.actor").toLowerCase()}: "${filters.actor}"`);
+	if (filters.genre) criterios.push(`${t("search.genre").toLowerCase()}: "${filters.genre}"`);
+	if (filters.language) criterios.push(`${t("search.original_language").toLowerCase()}: "${filters.language}"`);
+	if (filters.year) criterios.push(`${t("search.release_year").toLowerCase()}: "${filters.year}"`);
+	if (criterios.length === 0) return t("search.results.no_criteria");
 	return criterios.join(", ");
 }
 
 const PantallaResultadosBusqueda = ({ route, navigation }) => {
+	const { t } = useTranslation();
+
 	const { results = [], total = 0, filters = {} } = route.params;
 
 	return (
 		<View style={{ flex: 1 }}>
 			<View style={styles.header}>
-				<Text style={styles.headerTitle}>Resultados de búsqueda</Text>
-				<Text style={styles.subTitle}>{total === 1 ? "1 resultado" : `${total} resultados`}</Text>
-				<Text style={styles.criterio}>Buscaste por {getCriterioBusqueda(filters)}</Text>
+				<Text style={styles.headerTitle}>{t("search.results.title")}</Text>
+				<Text style={styles.subTitle}>{t("search.results.many_results", { count: total })}</Text>
+				<Text style={styles.criterio}>
+					{t("search.results.criteria_prefix")} {getCriterioBusqueda(filters, t)}
+				</Text>
 			</View>
 			<FlatList
 				data={results}
@@ -43,8 +50,8 @@ const PantallaResultadosBusqueda = ({ route, navigation }) => {
 				ListEmptyComponent={
 					<View style={styles.emptyContainer}>
 						<Image source={StitchTriste} style={styles.emptyImage} resizeMode="contain" />
-						<Text style={styles.emptyText}>No se encontraron resultados</Text>
-						<Text style={styles.emptySubText}>Prueba haciendo una búsqueda más genérica.</Text>
+						<Text style={styles.emptyText}>{t("search.results.no_results")}</Text>
+						<Text style={styles.emptySubText}>{t("search.results.try_generic")}</Text>
 					</View>
 				}
 			/>
@@ -111,3 +118,4 @@ const styles = StyleSheet.create({
 		marginBottom: 30,
 	},
 });
+

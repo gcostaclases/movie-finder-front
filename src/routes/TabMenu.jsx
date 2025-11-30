@@ -1,3 +1,4 @@
+//#region ----------- IMPORTS ------------
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -10,6 +11,8 @@ import MovieStack from "./MovieStack";
 import UserStack from "./UserStack";
 import { useSelector } from "react-redux";
 import SearchStack from "./SearchStack";
+import { useTranslation } from "react-i18next";
+//#endregion ----------- IMPORTS ------------
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +20,8 @@ const Menu = () => {
 	// const insets = useSafeAreaInsets();
 	// const tabBarHeight = 70 + insets.bottom;
 	const tabBarHeight = Platform.OS === "ios" ? 95 : 85;
+
+	const { t } = useTranslation();
 
 	const isLogged = useSelector((state) => state.user.isLogged);
 
@@ -87,7 +92,7 @@ const Menu = () => {
 					// Si está logueado muestro el header, sino no
 					return isLogged
 						? {
-								tabBarLabel: "Usuario",
+								tabBarLabel: t("tab_menu.user"),
 								headerShown: true,
 								tabBarStyle: hideTabBar
 									? { display: "none" }
@@ -97,7 +102,7 @@ const Menu = () => {
 									  },
 						  }
 						: {
-								tabBarLabel: "Usuario",
+								tabBarLabel: t("tab_menu.user"),
 								headerShown: false,
 								tabBarStyle: hideTabBar
 									? { display: "none" }
@@ -119,7 +124,7 @@ const Menu = () => {
 						routeName === "PantallaReseniasPelicula" ||
 						routeName === "PantallaActoresPelicula";
 					return {
-						tabBarLabel: "Películas",
+						tabBarLabel: t("tab_menu.movies"),
 						headerShown: !hideTabHeader,
 					};
 				}}
@@ -132,7 +137,7 @@ const Menu = () => {
 					const routeName = getFocusedRouteNameFromRoute(route);
 					const hideTabHeader = routeName === "PantallaResultadosBusqueda";
 					return {
-						tabBarLabel: "Buscar",
+						tabBarLabel: t("tab_menu.search"),
 						headerShown: !hideTabHeader,
 					};
 				}}

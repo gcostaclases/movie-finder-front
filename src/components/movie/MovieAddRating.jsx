@@ -3,10 +3,14 @@ import { StyleSheet, Text, View } from "react-native";
 import { Rating } from "react-native-ratings";
 import { useDispatch, useSelector } from "react-redux";
 import { setMovieRating } from "../../store/slices/userSlice";
+import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
 const MovieAddRating = () => {
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation();
+
 	const rating = useSelector((state) => state.user.movieReview.rating);
 
 	const handleRating = (rating) => {
@@ -17,7 +21,7 @@ const MovieAddRating = () => {
 	return (
 		<>
 			{/* Título calificación */}
-			<Text style={styles.titulo}>Califica la película:</Text>
+			<Text style={styles.titulo}>{t("movies.reviews.add.rating_title")}</Text>
 
 			{/* Estrellas */}
 			<View style={styles.starsRow}>
@@ -59,4 +63,3 @@ const styles = StyleSheet.create({
 		color: "#222",
 	},
 });
-

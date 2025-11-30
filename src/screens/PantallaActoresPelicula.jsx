@@ -2,6 +2,7 @@
 import { StyleSheet, View, Text, FlatList, Image, Dimensions } from "react-native";
 import { useSelector } from "react-redux";
 import StitchDesconfiado from "../assets/img/Stitch-Desconfiado.png";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const { width } = Dimensions.get("window");
@@ -14,6 +15,8 @@ const posterHeight = Math.round(posterWidth * 1.5); // Proporción de poster
 const ActorItem = ({ name, role, image }) => {
 	const uri = image ? `https://image.tmdb.org/t/p/w500${image}` : null;
 
+	const { t } = useTranslation();
+
 	return (
 		<View style={styles.actorBox}>
 			{/* Si hay imagen se muestra sino se muestra un placeholder con texto sin imagen */}
@@ -21,7 +24,7 @@ const ActorItem = ({ name, role, image }) => {
 				<Image source={{ uri }} style={styles.actorImage} />
 			) : (
 				<View style={[styles.actorImage, styles.noImage]}>
-					<Text style={styles.noImageText}>Sin imagen</Text>
+					<Text style={styles.noImageText}>{t("generic.no_image")}</Text>
 				</View>
 			)}
 			<Text style={styles.actorName}>{name}</Text>
@@ -33,6 +36,8 @@ const ActorItem = ({ name, role, image }) => {
 const PantallaActoresPelicula = ({ route }) => {
 	const actors = useSelector((state) => state.movie.actors);
 	// console.log("Actores de la película:", actors);
+
+	const { t } = useTranslation();
 
 	return (
 		<View style={styles.container}>
@@ -51,7 +56,7 @@ const PantallaActoresPelicula = ({ route }) => {
 							resizeMode="contain"
 						/>
 						<Text style={{ color: "#222", fontSize: 20, textAlign: "center", fontWeight: "500" }}>
-							No se encontraron actores para esta película
+							{t("movies.actors.no_actors_found")}
 						</Text>
 					</View>
 				}

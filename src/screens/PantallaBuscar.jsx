@@ -1,3 +1,4 @@
+//#region ----------- IMPORTS ------------
 import { StyleSheet, Text, View } from "react-native";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import SearchField from "../components/search/SearchField";
@@ -6,8 +7,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { searchSchema } from "../forms/search.schema";
 import useMovieSearch from "../hooks/useMovieSearch";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+//#endregion ----------- IMPORTS ------------
 
 const PantallaBuscar = ({ route, navigation }) => {
+	const { t } = useTranslation();
+
 	const {
 		control,
 		handleSubmit,
@@ -45,7 +50,7 @@ const PantallaBuscar = ({ route, navigation }) => {
 
 	return (
 		<View style={styles.content}>
-			<Text style={styles.title}>Buscar películas por...</Text>
+			<Text style={styles.title}>{t("search.search_title")}</Text>
 
 			{/* Título */}
 			<Controller
@@ -53,8 +58,8 @@ const PantallaBuscar = ({ route, navigation }) => {
 				name="title"
 				render={({ field: { onChange, value } }) => (
 					<SearchField
-						label="Título"
-						placeholder="Ej: Chainsaw Man..."
+						label={t("search.title")}
+						placeholder={t("search.title_placeholder")}
 						value={value}
 						onChangeText={onChange}
 						error={!!errors.title}
@@ -69,8 +74,8 @@ const PantallaBuscar = ({ route, navigation }) => {
 				name="actor"
 				render={({ field: { onChange, value } }) => (
 					<SearchField
-						label="Actor"
-						placeholder="Ej: Kikunosuke Toya..."
+						label={t("search.actor")}
+						placeholder={t("search.actor_placeholder")}
 						value={value}
 						onChangeText={onChange}
 						error={!!errors.actor}
@@ -85,8 +90,8 @@ const PantallaBuscar = ({ route, navigation }) => {
 				name="genre"
 				render={({ field: { onChange, value } }) => (
 					<SearchField
-						label="Género"
-						placeholder="Ej: Animación..."
+						label={t("search.genre")}
+						placeholder={t("search.genre_placeholder")}
 						value={value}
 						onChangeText={onChange}
 						error={!!errors.genre}
@@ -101,8 +106,8 @@ const PantallaBuscar = ({ route, navigation }) => {
 				name="language"
 				render={({ field: { onChange, value } }) => (
 					<SearchField
-						label="Idioma original"
-						placeholder="Ej: en, es..."
+						label={t("search.original_language")}
+						placeholder={t("search.original_language_placeholder")}
 						value={value}
 						onChangeText={onChange}
 						error={!!errors.language}
@@ -118,8 +123,8 @@ const PantallaBuscar = ({ route, navigation }) => {
 				name="year"
 				render={({ field: { onChange, value } }) => (
 					<SearchField
-						label="Año de lanzamiento"
-						placeholder="Ej: 2025..."
+						label={t("search.release_year")}
+						placeholder={t("search.release_year_placeholder")}
 						value={value}
 						onChangeText={onChange}
 						keyboardType="numeric"
@@ -134,7 +139,7 @@ const PantallaBuscar = ({ route, navigation }) => {
 
 			{/* Botón */}
 			<ButtonPrimary
-				title={searching ? "Buscando..." : "Buscar"}
+				title={searching ? t("generic.loading") : t("search.search_button")}
 				style={styles.button}
 				onPress={handleSubmit(onSubmit)}
 				disabled={!isValid || searching}

@@ -25,15 +25,19 @@ import {
 } from "../store/slices/userSlice";
 import useEditUserReview from "../hooks/useEditUserReview";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
 const PantallaEditarReseniaPelicula = ({ visible, onClose }) => {
 	const dispatch = useDispatch();
 
+	const { t } = useTranslation();
+
 	const reviewId = useSelector((state) => state.user.reviewToEditId);
 	const review = useSelector((state) => state.user.reviews.find((r) => r._id === reviewId));
 	const rating = useSelector((state) => state.user.movieReview.rating);
 	const comment = useSelector((state) => state.user.movieReview.comment);
+	// console.log("Comment en PantallaEditarReseniaPelicula:", comment);
 
 	// console.log("PantallaEditarReseniaPelicula visible:", visible);
 	// console.log("reviewToEditId:", reviewId);
@@ -74,7 +78,7 @@ const PantallaEditarReseniaPelicula = ({ visible, onClose }) => {
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error al editar reseña",
+				text1: t("movies.reviews.edit.editing_error"),
 				text2: error,
 			});
 		}
@@ -85,7 +89,7 @@ const PantallaEditarReseniaPelicula = ({ visible, onClose }) => {
 		if (success) {
 			Toast.show({
 				type: "success",
-				text1: "¡Reseña editada exitosamente!",
+				text1: t("movies.reviews.edit.editing_success"),
 			});
 			handleClose();
 		}
@@ -109,7 +113,7 @@ const PantallaEditarReseniaPelicula = ({ visible, onClose }) => {
 
 						{/* Botón Editar Reseña */}
 						<ButtonPrimary
-							title="Editar"
+							title={t("generic.edit")}
 							onPress={handleEdit}
 							style={{
 								width: "80%",

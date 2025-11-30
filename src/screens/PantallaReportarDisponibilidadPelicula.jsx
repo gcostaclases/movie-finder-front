@@ -8,10 +8,13 @@ import useReportMovieAvailability from "../hooks/useReportMovieAvailability";
 import { useEffect } from "react";
 import { resetSelectedProviderForMovie } from "../store/slices/userSlice";
 import Toast from "react-native-toast-message";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const PantallaReportarDisponibilidadPelicula = ({ visible, onClose }) => {
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation();
 
 	// Custom hook para reportar disponibilidad
 	const { reportAvailability, loading, error, success } = useReportMovieAvailability();
@@ -34,7 +37,7 @@ const PantallaReportarDisponibilidadPelicula = ({ visible, onClose }) => {
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error al reportar disponibilidad",
+				text1: t("movies.availability.report_error"),
 				text2: error,
 			});
 		}
@@ -45,7 +48,7 @@ const PantallaReportarDisponibilidadPelicula = ({ visible, onClose }) => {
 		if (success) {
 			Toast.show({
 				type: "success",
-				text1: "¡Reporte creado exitosamente!",
+				text1: t("movies.availability.report_success"),
 			});
 			handleClose();
 		}
@@ -63,7 +66,7 @@ const PantallaReportarDisponibilidadPelicula = ({ visible, onClose }) => {
 
 					{/* Botón Reportar */}
 					<ButtonPrimary
-						title="Reportar"
+						title={t("movies.availability.report_button")}
 						onPress={handleReport}
 						style={{ width: "85%", marginTop: 10, opacity: seleccionado ? 1 : 0.5 }}
 						disabled={!seleccionado}

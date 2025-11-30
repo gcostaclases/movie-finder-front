@@ -1,10 +1,15 @@
+//#region ----------- IMPORTS ------------
 import { View, Text, TouchableOpacity, Image, StyleSheet, Platform } from "react-native";
 import useProviders from "../../hooks/useProviders";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedProviderForMovie } from "../../store/slices/userSlice";
+import { useTranslation } from "react-i18next";
+//#endregion ------------ IMPORTS ------------
 
 const MovieAddAvailabilityReport = () => {
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation();
 
 	// Custom hook para obtener proveedores
 	const { loading, error } = useProviders();
@@ -20,12 +25,12 @@ const MovieAddAvailabilityReport = () => {
 	return (
 		<>
 			{/* Título */}
-			<Text style={styles.titulo}>¿En dónde viste esta película?</Text>
+			<Text style={styles.titulo}>{t("movies.availability.report_question")}</Text>
 
 			{/* Proveedores */}
 			<View style={styles.proveedoresGrid}>
 				{loading ? (
-					<Text>Cargando proveedores...</Text>
+					<Text>{t("movies.availability.loading_providers")}</Text>
 				) : error ? (
 					<Text style={{ color: "red" }}>{error}</Text>
 				) : (

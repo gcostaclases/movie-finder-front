@@ -2,11 +2,16 @@
 import { StyleSheet, Text, TextInput } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setMovieComment } from "../../store/slices/userSlice";
+import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
 const MovieAddReview = () => {
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation();
+
 	const comment = useSelector((state) => state.user.movieReview.comment);
+	// console.log("MovieAddReview comment:", comment);
 
 	const handleReview = (text) => {
 		//Para que no me manden espacios vacíos al inicio
@@ -18,13 +23,13 @@ const MovieAddReview = () => {
 	return (
 		<>
 			{/* Título reseña */}
-			<Text style={styles.titulo}>Escriba su reseña:</Text>
+			<Text style={styles.titulo}>{t("movies.reviews.add.review_title")}</Text>
 
 			{/* Campo de texto */}
 			<TextInput
 				style={styles.textInput}
 				multiline
-				placeholder="Escriba aquí..."
+				placeholder={t("movies.reviews.add.review_placeholder")}
 				value={comment}
 				onChangeText={handleReview}
 				maxLength={400}

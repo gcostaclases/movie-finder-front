@@ -19,10 +19,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetMovieRating, resetMovieComment } from "../store/slices/userSlice";
 import useAddReview from "../hooks/useAddReview";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
 const PantallaAgregarReseniaPelicula = ({ visible, onClose }) => {
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation();
 
 	const movieId = useSelector((state) => state.movie.id);
 	const rating = useSelector((state) => state.user.movieReview.rating);
@@ -49,7 +52,7 @@ const PantallaAgregarReseniaPelicula = ({ visible, onClose }) => {
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error al enviar reseña",
+				text1: t("movies.reviews.add.adding_error"),
 				text2: error,
 			});
 		}
@@ -60,7 +63,7 @@ const PantallaAgregarReseniaPelicula = ({ visible, onClose }) => {
 		if (success) {
 			Toast.show({
 				type: "success",
-				text1: "¡Reseña creada exitosamente!",
+				text1: t("movies.reviews.add.adding_success"),
 			});
 			handleClose();
 		}
@@ -82,7 +85,7 @@ const PantallaAgregarReseniaPelicula = ({ visible, onClose }) => {
 
 						{/* Botón Reseñar */}
 						<ButtonPrimary
-							title="Reseñar"
+							title={t("movies.reviews.add.make_review_button")}
 							onPress={handleReview}
 							style={{ width: "80%", marginTop: 10, opacity: rating && comment ? 1 : 0.5 }}
 							disabled={!rating || !comment}

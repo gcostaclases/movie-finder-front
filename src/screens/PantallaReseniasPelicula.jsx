@@ -12,7 +12,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import useDeleteUserReview from "../hooks/useDeleteUserReview";
-import { setReviewToEditId } from "../store/slices/userSlice";
+import {
+	setReviewToEditId,
+	setMovieRating,
+	setMovieComment,
+	resetMovieRating,
+	resetMovieComment,
+} from "../store/slices/userSlice";
+import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
 const ReseñaItem = ({ user, rating, comment }) => (
@@ -22,7 +29,7 @@ const ReseñaItem = ({ user, rating, comment }) => (
 				source={user?.profileImage ? { uri: user.profileImage } : require("../assets/img/User-Placeholder.png")}
 				style={styles.avatar}
 			/>
-			<Text style={styles.userName}>{user?.username || "Usuario"}</Text>
+			<Text style={styles.userName}>{user?.username}</Text>
 			<View style={styles.stars}>
 				<Rating
 					type="custom"
@@ -43,8 +50,13 @@ const ReseñaItem = ({ user, rating, comment }) => (
 const PantallaReseniasPelicula = ({ navigation, route }) => {
 	const dispatch = useDispatch();
 
+	const { t } = useTranslation();
+
 	// Obtengo el ID de la película desde el store
 	const movieId = useSelector((state) => state.movie.id);
+
+	// Obtengo el título de la película desde el store
+	const movieTitle = useSelector((state) => state.movie.title);
 
 	// Custom hook que obtiene las reseñas de la película
 	const { reviews, loading, error } = useMovieReviews(movieId);
@@ -61,6 +73,8 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 	const [modalEditarReseniaVisible, setModalEditarReseniaVisible] = useState(false);
 
 	const handleAgregarResenia = () => {
+		dispatch(resetMovieRating());
+		dispatch(resetMovieComment());
 		setModalAgregarReseniaVisible(true);
 	};
 
@@ -68,21 +82,22 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 	// console.log("Mi reseña de la película:", myReview);
 
 	const handleEditarResenia = () => {
-		// console.log("Editar reseña ID:", myReview._id);
+		dispatch(setMovieRating(myReview.rating));
+		dispatch(setMovieComment(myReview.comment));
 		dispatch(setReviewToEditId(myReview._id));
 		setModalEditarReseniaVisible(true);
 	};
 
 	const handleEliminarResenia = () => {
-		Alert.alert("Eliminar reseña", "¿Seguro que querés eliminar tu reseña?", [
-			{ text: "Cancelar", style: "cancel" },
+		Alert.alert(t("generic.delete"), t("user.reviews.delete_confirm", { title: movieTitle }), [
+			{ text: t("generic.cancel"), style: "cancel" },
 			{
-				text: "Eliminar",
+				text: t("generic.delete"),
 				style: "destructive",
 				onPress: async () => {
 					const ok = await deleteReview(myReview._id);
 					if (ok) {
-						Toast.show({ type: "success", text1: "Reseña eliminada" });
+						Toast.show({ type: "success", text1: t("user.reviews.deleting_success") });
 					}
 				},
 			},
@@ -93,7 +108,7 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 		if (error) {
 			Toast.show({
 				type: "error",
-				text1: "Error al cargar reseñas",
+				text1: t("user.reviews.loading_reviews_error"),
 				text2: error,
 			});
 		}
@@ -103,7 +118,7 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 		return (
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 				<ActivityIndicator size="large" color="#27AAE1" />
-				<Text>Cargando reseñas...</Text>
+				<Text>{t("user.reviews.loading_reviews")}</Text>
 			</View>
 		);
 	}
@@ -113,7 +128,7 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
 				<Image source={StitchDesconfiado} style={{ width: 180, height: 180, marginBottom: 24 }} resizeMode="contain" />
 				<Text style={{ color: "#222", fontSize: 20, textAlign: "center", fontWeight: "500" }}>
-					Hubo un error al cargar las reseñas de la película
+					{t("movies.reviews.no_reviews_found")}
 				</Text>
 			</View>
 		);
@@ -130,10 +145,10 @@ const PantallaReseniasPelicula = ({ navigation, route }) => {
 				ListEmptyComponent={
 					<View style={styles.emptyContainer}>
 						<Image source={StitchExpectante} style={styles.emptyImage} resizeMode="contain" />
-						<Text style={styles.emptyText}>No se encontraron reseñas{"\n"}para esta película</Text>
-						<Text style={styles.emptySubText}>¿Quieres realizar una reseña?</Text>
+						<Text style={styles.emptyText}>{t("movies.reviews.no_reviews_found")}</Text>
+						<Text style={styles.emptySubText}>{t("movies.reviews.add.add_review_question")}</Text>
 						<ButtonPrimary
-							title="Agregar reseña"
+							title={t("movies.reviews.add.add_review_button")}
 							iconName="edit"
 							onPress={handleAgregarResenia}
 							style={{ width: "85%", marginTop: 8 }}

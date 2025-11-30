@@ -2,6 +2,7 @@
 import { View, Text, Image, Dimensions, StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
 
 const { width } = Dimensions.get("window");
@@ -18,6 +19,8 @@ const MovieDetailInfo = () => {
 	const movie = useSelector((state) => state.movie);
 	// console.log("MovieDetailInfo movie:", movie);
 
+	const { t } = useTranslation();
+
 	return (
 		<>
 			{/* Imagen principal */}
@@ -25,7 +28,7 @@ const MovieDetailInfo = () => {
 				<Image source={{ uri: "https://image.tmdb.org/t/p/w780" + movie.backdropPath }} style={styles.mainImage} />
 			) : (
 				<View style={[styles.mainImage, styles.noImage]}>
-					<Text style={styles.noImageText}>Sin imagen</Text>
+					<Text style={styles.noImageText}>{t("generic.no_image")}</Text>
 				</View>
 			)}
 
@@ -44,9 +47,9 @@ const MovieDetailInfo = () => {
 							<Text style={styles.duration}>{movie.duration ? `${movie.duration}min` : "?"}</Text>
 						</View>
 						<Text style={styles.director}>
-							DIRECTOR:{" "}
+							{t("movies.info.director").toUpperCase() + ": "}
 							<Text style={{ fontWeight: "bold" }}>
-								{movie.directors && movie.directors.length > 0 ? movie.directors[0].name : "Desconocido"}
+								{movie.directors && movie.directors.length > 0 ? movie.directors[0].name : t("generic.unknown")}
 							</Text>
 						</Text>
 					</View>
@@ -56,13 +59,13 @@ const MovieDetailInfo = () => {
 						<Image source={{ uri: "https://image.tmdb.org/t/p/w500" + movie.posterPath }} style={styles.posterImage} />
 					) : (
 						<View style={[styles.posterImage, styles.noImage]}>
-							<Text style={styles.noImageText}>Sin imagen</Text>
+							<Text style={styles.noImageText}>{t("generic.no_image")}</Text>
 						</View>
 					)}
 				</View>
 
 				{/* Géneros */}
-				<Text style={styles.genreTitle}>Géneros:</Text>
+				<Text style={styles.genreTitle}>{t("movies.info.genres") + ":"}</Text>
 				<View style={styles.genres}>
 					{movie.genres && movie.genres.length > 0 ? (
 						movie.genres.map((g) => (
@@ -71,12 +74,12 @@ const MovieDetailInfo = () => {
 							</Text>
 						))
 					) : (
-						<Text style={styles.genre}>Sin géneros</Text>
+						<Text style={styles.genre}>{t("movies.info.no_genres")}</Text>
 					)}
 				</View>
 
 				{/* Descripción */}
-				<Text style={styles.description}>{movie.overview || "Sin descripción disponible."}</Text>
+				<Text style={styles.description}>{movie.overview || t("movies.info.no_overview")}</Text>
 			</View>
 		</>
 	);

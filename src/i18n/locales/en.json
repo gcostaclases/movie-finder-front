@@ -13,9 +13,75 @@
 		"es": "Spanish",
 		"en": "English"
 	},
+	"tab_menu": {
+		"user": "User",
+		"movies": "Movies",
+		"search": "Search"
+	},
 	"movies": {
 		"error_loading_movies": "An error occurred while loading movies",
-		"no_movies_found": "No movies found"
+		"no_movies_found": "No movies found",
+		"actors": {
+			"actors": "Actors",
+			"no_actors_found": "No actors found for this movie"
+		},
+		"reviews": {
+			"reviews": "Reviews",
+			"no_reviews_found": "No reviews found for this movie",
+			"add": {
+				"add_review_button": "Add review",
+				"add_review_question": "Do you want to add a review?",
+				"make_review_button": "Review",
+				"adding_error": "An error occurred while adding the review",
+				"adding_success": "Review added successfully",
+				"rating_title": "Rate the movie:",
+				"review_title": "Write your review:",
+				"review_placeholder": "Share your opinion about the movie here..."
+			},
+			"edit": {
+				"editing_success": "Review edited successfully",
+				"editing_error": "An error occurred while editing the review"
+			}
+		},
+		"rating": "Rating",
+		"info": {
+			"no_image": "No image available",
+			"director": "Director",
+			"genres": "Genres",
+			"no_genres": "No genres available",
+			"no_overview": "No overview available"
+		},
+		"availability": {
+			"providers": {
+				"providers": "Providers",
+				"your_providers": "Your providers",
+				"your_providers_none": "None of your providers offer this movie.",
+				"other_providers": "Other providers",
+				"other_providers_none": "No other providers offer this movie.",
+				"no_providers": "There are no reports of availability for this movie."
+			},
+			"report": "Report availability",
+			"must_be_logged": "You must be logged in to report availability.",
+			"report_success": "Availability reported successfully.",
+			"report_error": "An error occurred while reporting availability.",
+			"report_button": "Report",
+			"report_question": "Where did you watch this movie?",
+			"loading_providers": "Loading providers..."
+		},
+		"review": {
+			"add": "Add review",
+			"edit": "Edit review",
+			"must_be_logged": "You must be logged in to write a review."
+		},
+		"watchlist": {
+			"add": "Add to watchlist",
+			"added": "Added to watchlist",
+			"adding": "Adding to watchlist...",
+			"remove": "Remove from watchlist",
+			"removed": "Removed from watchlist",
+			"error_remove": "An error occurred while removing from watchlist",
+			"must_be_logged": "You must be logged in to manage your watchlist."
+		}
 	},
 	"user": {
 		"tab_menu": {
@@ -57,10 +123,12 @@
 			},
 			"no_reviews": "You have not written any reviews yet.",
 			"loading_reviews": "Loading reviews...",
+			"loading_reviews_error": "An error occurred while loading reviews.",
 			"editing_error": "An error occurred while editing the review.",
 			"editing_success": "Review successfully edited.",
 			"deleting_error": "An error occurred while deleting the review.",
-			"deleting_success": "Review successfully deleted."
+			"deleting_success": "Review successfully deleted.",
+			"delete_confirm": "Are you sure you want to delete your review for \"{{title}}\"?"
 		},
 		"watchlist": {
 			"no_movies": "Your watchlist is empty.",
@@ -69,6 +137,29 @@
 			"deleting_success": "Movie successfully removed.",
 			"delete_confirm": "Are you sure you want to remove \"{{title}}\" from your watchlist?"
 		}
+	},
+	"search": {
+		"results": {
+			"title": "Search results",
+			"one_result": "1 result",
+			"many_results": "{{count}} results",
+			"criteria_prefix": "You searched by",
+			"no_criteria": "no criteria",
+			"no_results": "No results found",
+			"try_generic": "Try a more generic search."
+		},
+		"search_title": "Searching movies ...",
+		"title": "Title",
+		"title_placeholder": "Eg: Harry Potter",
+		"actor": "Actor",
+		"actor_placeholder": "Eg: Brad Pitt",
+		"genre": "Genre",
+		"genre_placeholder": "Ej: Animation",
+		"original_language": "Original language (ISO 639-1)",
+		"original_language_placeholder": "Eg: en, es, ja",
+		"release_year": "Release year",
+		"release_year_placeholder": "Eg: 2025",
+		"search_button": "Search"
 	},
 	"greeting": "Hello!",
 	"welcome_user": "Welcome, {{name}}",

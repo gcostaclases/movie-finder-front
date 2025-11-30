@@ -13,9 +13,75 @@
 		"es": "Español",
 		"en": "Inglés"
 	},
+	"tab_menu": {
+		"user": "Usuario",
+		"movies": "Películas",
+		"search": "Buscar"
+	},
 	"movies": {
-		"error_loading_movies": "Ocurrió un error al cargar las películas",
-		"no_movies_found": "No se encontraron películas"
+		"error_loading_movies": "Hubo un error al cargar los datos de la película",
+		"no_movies_found": "No se encontraron películas",
+		"actors": {
+			"actors": "Actores",
+			"no_actors_found": "No se encontraron actores para esta película"
+		},
+		"reviews": {
+			"reviews": "Reseñas",
+			"no_reviews_found": "No se encontraron reseñas para esta película",
+			"add": {
+				"add_review_button": "Agregar reseña",
+				"add_review_question": "¿Quieres agregar una reseña?",
+				"make_review_button": "Reseñar",
+				"adding_error": "Ocurrió un error al agregar la reseña",
+				"adding_success": "Reseña agregada con éxito",
+				"rating_title": "Califica la película:",
+				"review_title": "Escriba su reseña:",
+				"review_placeholder": "Escriba su reseña aquí..."
+			},
+			"edit": {
+				"editing_success": "Reseña editada con éxito",
+				"editing_error": "Ocurrió un error al editar la reseña"
+			}
+		},
+		"rating": "Calificación",
+		"info": {
+			"no_image": "No hay imagen disponible",
+			"director": "Director",
+			"genres": "Géneros",
+			"no_genres": "Sin géneros",
+			"no_overview": "Sin descripción disponible"
+		},
+		"availability": {
+			"providers": {
+				"providers": "Proveedores",
+				"your_providers": "Tus proveedores",
+				"your_providers_none": "Ninguno de tus proveedores ofrece esta película.",
+				"other_providers": "Otros proveedores",
+				"other_providers_none": "Ningún otro proveedor ofrece esta película.",
+				"no_providers": "No se reportaron proveedores para esta película."
+			},
+			"report": "Reportar disponibilidad",
+			"must_be_logged": "Debes estar logueado para reportar la disponibilidad.",
+			"report_success": "Gracias por reportar la disponibilidad.",
+			"report_error": "Ocurrió un error al reportar la disponibilidad.",
+			"report_button": "Reportar",
+			"report_question": "¿En dónde viste esta película?",
+			"loading_providers": "Cargando proveedores..."
+		},
+		"review": {
+			"add": "Agregar reseña",
+			"edit": "Editar reseña",
+			"must_be_logged": "Debes estar logueado para agregar una reseña."
+		},
+		"watchlist": {
+			"add": "Agregar a la watchlist",
+			"added": "Agregado a la watchlist",
+			"adding": "Agregando a la watchlist...",
+			"remove": "Quitar de la watchlist",
+			"removed": "Quitado de la watchlist",
+			"error_remove": "No se pudo quitar de la watchlist",
+			"must_be_logged": "Debes estar logueado para gestionar tu watchlist."
+		}
 	},
 	"user": {
 		"tab_menu": {
@@ -57,10 +123,12 @@
 			},
 			"no_reviews": "Aún no has escrito ninguna reseña.",
 			"loading_reviews": "Cargando reseñas...",
+			"loading_reviews_error": "Error al cargar reseñas.",
 			"editing_error": "Ocurrió un error al editar la reseña.",
 			"editing_success": "Reseña editada con éxito.",
 			"deleting_error": "Ocurrió un error al eliminar la reseña.",
-			"deleting_success": "Reseña eliminada con éxito."
+			"deleting_success": "Reseña eliminada con éxito.",
+			"delete_confirm": "¿Está seguro que quiere eliminar su reseña para \"{{title}}\"?"
 		},
 		"watchlist": {
 			"no_movies": "Tu watchlist está vacía.",
@@ -69,6 +137,29 @@
 			"deleting_success": "Película eliminada con éxito.",
 			"delete_confirm": "¿Está seguro que quiere quitar \"{{title}}\" de su watchlist?"
 		}
+	},
+	"search": {
+		"results": {
+			"title": "Resultados de búsqueda",
+			"one_result": "1 resultado",
+			"many_results": "{{count}} resultados",
+			"criteria_prefix": "Buscaste por",
+			"no_criteria": "sin criterios",
+			"no_results": "No se encontraron resultados",
+			"try_generic": "Prueba haciendo una búsqueda más genérica."
+		},
+		"search_title": "Buscar películas por...",
+		"title": "Título",
+		"title_placeholder": "Ej: Harry Potter",
+		"actor": "Actor",
+		"actor_placeholder": "Ej: Brad Pitt",
+		"genre": "Género",
+		"genre_placeholder": "Ej: Animación",
+		"original_language": "Idioma original (ISO 639-1)",
+		"original_language_placeholder": "Ej: en, es, ja",
+		"release_year": "Año de lanzamiento",
+		"release_year_placeholder": "Ej: 2025",
+		"search_button": "Buscar"
 	},
 	"greeting": "Hola!",
 	"welcome_user": "Bienvenido, {{name}}",
