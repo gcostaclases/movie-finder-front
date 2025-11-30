@@ -16,7 +16,8 @@ export default {
 			[
 				"expo-build-properties",
 				{
-					android: { compileSdkVersion: 34, targetSdkVersion: 34 },
+					// android: { compileSdkVersion: 34, targetSdkVersion: 34 },
+					android: { compileSdkVersion: 36, targetSdkVersion: 36 },
 				},
 			],
 			"expo-localization",
