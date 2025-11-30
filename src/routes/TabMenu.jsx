@@ -25,6 +25,12 @@ const Menu = () => {
 
 	const isLogged = useSelector((state) => state.user.isLogged);
 
+	const tabBarStyleWithSafeArea = {
+		backgroundColor: "#CCDEE5",
+		height: tabBarHeight + (Platform.OS === "android" ? insets.bottom : 0),
+		paddingBottom: Platform.OS === "android" ? insets.bottom : 0,
+	};
+
 	return (
 		<Tab.Navigator
 			initialRouteName="MovieStack"
@@ -106,27 +112,11 @@ const Menu = () => {
 					const routeName = getFocusedRouteNameFromRoute(route);
 					const hideTabBar = routeName === "PantallaLogin" || routeName === "PantallaRegistro";
 					// Si está logueado muestro el header, sino no
-					return isLogged
-						? {
-								tabBarLabel: t("tab_menu.user"),
-								headerShown: true,
-								tabBarStyle: hideTabBar
-									? { display: "none" }
-									: {
-											backgroundColor: "#CCDEE5",
-											height: tabBarHeight,
-									  },
-						  }
-						: {
-								tabBarLabel: t("tab_menu.user"),
-								headerShown: false,
-								tabBarStyle: hideTabBar
-									? { display: "none" }
-									: {
-											backgroundColor: "#CCDEE5",
-											height: tabBarHeight,
-									  },
-						  };
+					return {
+						tabBarLabel: t("tab_menu.user"),
+						headerShown: isLogged,
+						tabBarStyle: hideTabBar ? { display: "none" } : tabBarStyleWithSafeArea,
+					};
 				}}
 			/>
 			<Tab.Screen
