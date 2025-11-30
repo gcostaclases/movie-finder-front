@@ -3,7 +3,10 @@ export default {
 	expo: {
 		name: "movie-finder",
 		slug: "movie-finder",
-		android: { package: "com.tuempresa.clase" },
+		android: {
+			package: "com.tuempresa.clase",
+			softwareKeyboardLayoutMode: "pan",
+		},
 		ios: { bundleIdentifier: "com.tuempresa.clase" },
 		// ⛔️ OJO: NO pongas "@notifee/react-native" acá.
 		plugins: [

@@ -4,11 +4,11 @@ import {
 	Text,
 	View,
 	Modal,
-	TextInput,
 	KeyboardAvoidingView,
 	Platform,
 	TouchableWithoutFeedback,
 	Keyboard,
+	ScrollView,
 } from "react-native";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import ButtonCloseModal from "../components/general/ButtonCloseModal";
@@ -71,8 +71,15 @@ const PantallaAgregarReseniaPelicula = ({ visible, onClose }) => {
 
 	return (
 		<Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-				<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.modalWrapper}>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				style={styles.modalWrapper}
+				keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					{/* <ScrollView
+						contentContainerStyle={styles.scrollContent}
+						keyboardShouldPersistTaps="handled"
+						showsVerticalScrollIndicator={false}> */}
 					<View style={styles.modalContainer}>
 						{/* Botón cerrar */}
 						<ButtonCloseModal onPress={handleClose} />
@@ -91,8 +98,9 @@ const PantallaAgregarReseniaPelicula = ({ visible, onClose }) => {
 							disabled={!rating || !comment}
 						/>
 					</View>
-				</KeyboardAvoidingView>
-			</TouchableWithoutFeedback>
+					{/* </ScrollView> */}
+				</TouchableWithoutFeedback>
+			</KeyboardAvoidingView>
 		</Modal>
 	);
 };
@@ -117,6 +125,7 @@ const styles = StyleSheet.create({
 		shadowRadius: 10,
 		shadowOffset: { width: 0, height: -5 },
 		minHeight: 420,
+		maxHeight: "80%",
 	},
 });
 

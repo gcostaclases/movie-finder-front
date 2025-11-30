@@ -1,5 +1,14 @@
 //#region ----------- IMPORTS ------------
-import { StyleSheet, Text, View } from "react-native";
+import {
+	StyleSheet,
+	Text,
+	View,
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	TouchableWithoutFeedback,
+	Keyboard,
+} from "react-native";
 import ButtonPrimary from "../components/general/ButtonPrimary";
 import SearchField from "../components/search/SearchField";
 import { useForm, Controller } from "react-hook-form";
@@ -11,33 +20,42 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
 //#endregion ----------- IMPORTS ------------
 
-const PantallaBuscar = ({ route, navigation }) => {
-	const { t } = useTranslation();
+//#region Cosas que preciso para el schema Yup
+// Helper para transformar "" en null
+const normalizeEmptyStringToNull = (value, originalValue) => {
+	if (originalValue === "") return null;
+	return value;
+};
 
-	//#region SCHEMA YUP
-	// Helper para transformar "" en null
-	const normalizeEmptyStringToNull = (value, originalValue) => {
-		if (originalValue === "") return null;
-		return value;
-	};
+// Método personalizado para que al menos se complete uno de los campos
+// function atLeastOneOf(list, t) {
+// 	return this.test({
+// 		name: "atLeastOneOf",
+// 		message: t("validation.at_least_one"),
+// 		exclusive: true,
+// 		params: { keys: list.join(", ") },
+// 		test: (value) => value != null && list.some((f) => !!value[f]),
+// 	});
+// }
 
-	// Método personalizado para que al menos se complete uno de los campos
-	function atLeastOneOf(list, t) {
+// Agrego el método a Yup
+if (!Yup.object.prototype.atLeastOneOf) {
+	Yup.addMethod(Yup.object, "atLeastOneOf", function (list, message) {
 		return this.test({
 			name: "atLeastOneOf",
-			message: t("validation.at_least_one"),
+			message,
 			exclusive: true,
 			params: { keys: list.join(", ") },
 			test: (value) => value != null && list.some((f) => !!value[f]),
 		});
-	}
-	// Agrego el método a Yup
-	if (!Yup.object.prototype.atLeastOneOf) {
-		Yup.addMethod(Yup.object, "atLeastOneOf", function (list) {
-			return atLeastOneOf.call(this, list, t);
-		});
-	}
+	});
+}
+//#endregion Cosas que preciso para el schema Yup
 
+const PantallaBuscar = ({ route, navigation }) => {
+	const { t } = useTranslation();
+
+	//#region SCHEMA YUP
 	const searchSchema = Yup.object()
 		.shape({
 			title: Yup.string().transform(normalizeEmptyStringToNull).max(100, t("validation.title_max")).nullable(),
@@ -52,7 +70,7 @@ const PantallaBuscar = ({ route, navigation }) => {
 				.matches(/^\d{4}$/, t("validation.year_pattern"))
 				.nullable(),
 		})
-		.atLeastOneOf(["title", "actor", "genre", "language", "year"]);
+		.atLeastOneOf(["title", "actor", "genre", "language", "year"], t("validation.at_least_one"));
 	//#endregion SCHEMA YUP
 
 	const {
@@ -91,103 +109,113 @@ const PantallaBuscar = ({ route, navigation }) => {
 	};
 
 	return (
-		<View style={styles.content}>
-			<Text style={styles.title}>{t("search.search_title")}</Text>
+		<KeyboardAvoidingView
+			style={{ flex: 1 }}
+			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 140}>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+				<ScrollView
+					contentContainerStyle={styles.content}
+					keyboardShouldPersistTaps="handled"
+					showsVerticalScrollIndicator={false}>
+					<Text style={styles.title}>{t("search.search_title")}</Text>
 
-			{/* Título */}
-			<Controller
-				control={control}
-				name="title"
-				render={({ field: { onChange, value } }) => (
-					<SearchField
-						label={t("search.title")}
-						placeholder={t("search.title_placeholder")}
-						value={value}
-						onChangeText={onChange}
-						error={!!errors.title}
+					{/* Título */}
+					<Controller
+						control={control}
+						name="title"
+						render={({ field: { onChange, value } }) => (
+							<SearchField
+								label={t("search.title")}
+								placeholder={t("search.title_placeholder")}
+								value={value}
+								onChangeText={onChange}
+								error={!!errors.title}
+							/>
+						)}
 					/>
-				)}
-			/>
-			{errors.title && <Text style={styles.error}>{errors.title.message}</Text>}
+					{errors.title && <Text style={styles.error}>{errors.title.message}</Text>}
 
-			{/* Actor */}
-			<Controller
-				control={control}
-				name="actor"
-				render={({ field: { onChange, value } }) => (
-					<SearchField
-						label={t("search.actor")}
-						placeholder={t("search.actor_placeholder")}
-						value={value}
-						onChangeText={onChange}
-						error={!!errors.actor}
+					{/* Actor */}
+					<Controller
+						control={control}
+						name="actor"
+						render={({ field: { onChange, value } }) => (
+							<SearchField
+								label={t("search.actor")}
+								placeholder={t("search.actor_placeholder")}
+								value={value}
+								onChangeText={onChange}
+								error={!!errors.actor}
+							/>
+						)}
 					/>
-				)}
-			/>
-			{errors.actor && <Text style={styles.error}>{errors.actor.message}</Text>}
+					{errors.actor && <Text style={styles.error}>{errors.actor.message}</Text>}
 
-			{/* Género */}
-			<Controller
-				control={control}
-				name="genre"
-				render={({ field: { onChange, value } }) => (
-					<SearchField
-						label={t("search.genre")}
-						placeholder={t("search.genre_placeholder")}
-						value={value}
-						onChangeText={onChange}
-						error={!!errors.genre}
+					{/* Género */}
+					<Controller
+						control={control}
+						name="genre"
+						render={({ field: { onChange, value } }) => (
+							<SearchField
+								label={t("search.genre")}
+								placeholder={t("search.genre_placeholder")}
+								value={value}
+								onChangeText={onChange}
+								error={!!errors.genre}
+							/>
+						)}
 					/>
-				)}
-			/>
-			{errors.genre && <Text style={styles.error}>{errors.genre.message}</Text>}
+					{errors.genre && <Text style={styles.error}>{errors.genre.message}</Text>}
 
-			{/* Idioma original */}
-			<Controller
-				control={control}
-				name="language"
-				render={({ field: { onChange, value } }) => (
-					<SearchField
-						label={t("search.original_language")}
-						placeholder={t("search.original_language_placeholder")}
-						value={value}
-						onChangeText={onChange}
-						error={!!errors.language}
-						autoCapitalize="none"
+					{/* Idioma original */}
+					<Controller
+						control={control}
+						name="language"
+						render={({ field: { onChange, value } }) => (
+							<SearchField
+								label={t("search.original_language")}
+								placeholder={t("search.original_language_placeholder")}
+								value={value}
+								onChangeText={onChange}
+								error={!!errors.language}
+								autoCapitalize="none"
+							/>
+						)}
 					/>
-				)}
-			/>
-			{errors.language && <Text style={styles.error}>{errors.language.message}</Text>}
+					{errors.language && <Text style={styles.error}>{errors.language.message}</Text>}
 
-			{/* Año de lanzamiento */}
-			<Controller
-				control={control}
-				name="year"
-				render={({ field: { onChange, value } }) => (
-					<SearchField
-						label={t("search.release_year")}
-						placeholder={t("search.release_year_placeholder")}
-						value={value}
-						onChangeText={onChange}
-						keyboardType="numeric"
-						error={!!errors.year}
+					{/* Año de lanzamiento */}
+					<Controller
+						control={control}
+						name="year"
+						render={({ field: { onChange, value } }) => (
+							<SearchField
+								label={t("search.release_year")}
+								placeholder={t("search.release_year_placeholder")}
+								value={value}
+								onChangeText={onChange}
+								keyboardType="numeric"
+								error={!!errors.year}
+							/>
+						)}
 					/>
-				)}
-			/>
-			{errors.year && <Text style={styles.error}>{errors.year.message}</Text>}
+					{errors.year && <Text style={styles.error}>{errors.year.message}</Text>}
 
-			{/* Error global del schema */}
-			{errors[""] && <Text style={styles.error}>{errors[""].message}</Text>}
+					{/* Error global del schema */}
+					{errors[""] && <Text style={styles.error}>{errors[""].message}</Text>}
 
-			{/* Botón */}
-			<ButtonPrimary
-				title={searching ? t("generic.loading") : t("search.search_button")}
-				style={styles.button}
-				onPress={handleSubmit(onSubmit)}
-				disabled={!isValid || searching}
-			/>
-			{error && <Text style={styles.error}>{error}</Text>}
-		</View>
+					{/* Botón */}
+					<ButtonPrimary
+						title={searching ? t("generic.loading") : t("search.search_button")}
+						style={styles.button}
+						onPress={handleSubmit(onSubmit)}
+						disabled={!isValid || searching}
+					/>
+					{error && <Text style={styles.error}>{error}</Text>}
+				</ScrollView>
+			</TouchableWithoutFeedback>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -195,14 +223,16 @@ export default PantallaBuscar;
 
 const styles = StyleSheet.create({
 	content: {
-		flex: 1,
+		// flex: 1,
 		paddingHorizontal: 24,
 		paddingTop: 18,
+		paddingBottom: 40,
+		flexGrow: 1,
 	},
 	title: {
 		fontSize: 18,
 		fontWeight: "600",
-		marginBottom: 18,
+		marginBottom: 5,
 		color: "#222",
 	},
 	button: {

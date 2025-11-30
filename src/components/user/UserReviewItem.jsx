@@ -24,6 +24,10 @@ const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 				onPress={onEdit}
 				progress={progress}
 				iconName="pen"
+				style={{
+					borderTopRightRadius: 0,
+					borderBottomRightRadius: 0,
+				}}
 			/>
 			<ButtonSlideIn
 				label={t("generic.delete")}
@@ -32,6 +36,10 @@ const UserReviewItem = ({ movie, rating, comment, onEdit, onDelete }) => {
 				onPress={onDelete}
 				progress={progress}
 				iconName="trash"
+				style={{
+					borderTopLeftRadius: 0,
+					borderBottomLeftRadius: 0,
+				}}
 			/>
 		</View>
 	);
