@@ -22,6 +22,7 @@ const TextInputLoginSignUp = ({
 					style={styles.input}
 					placeholder={placeholder}
 					placeholderTextColor="#7F7F7F"
+					color="#222222"
 					secureTextEntry={isSecure}
 					value={value}
 					onChangeText={onChangeText}

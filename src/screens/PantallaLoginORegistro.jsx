@@ -51,10 +51,3 @@ const styles = StyleSheet.create({
 	},
 });
 
-// {/* Botón con ícono */}
-// 	<ButtonPrimary
-// 		title="Agregar reseña"
-// 		iconName="pencil" // Ícono de Font Awesome
-// 		onPress={() => alert("Ir a agregar reseña")}
-// 	/>
-

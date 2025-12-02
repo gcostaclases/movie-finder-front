@@ -30,6 +30,8 @@ const MovieAddReview = () => {
 				style={styles.textInput}
 				multiline
 				placeholder={t("movies.reviews.add.review_placeholder")}
+				placeholderTextColor="#7F7F7F"
+				color="#222222"
 				value={comment}
 				onChangeText={handleReview}
 				maxLength={400}

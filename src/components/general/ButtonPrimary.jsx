@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons"; // Importa Font Awesome 5 desde react-native-vector-icons
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const ButtonPrimary = ({ title, onPress, iconName, color = "#345780", style, disabled = false }) => {
 	return (
