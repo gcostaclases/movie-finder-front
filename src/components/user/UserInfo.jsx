@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import useUploadProfileImage from "../../hooks/useUploadProfileImage";
 import FadeInView from "../animations/FadeInView";
+import Toast from "react-native-toast-message";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 //#endregion ------------ IMPORTS ------------
@@ -21,6 +22,21 @@ const UserInfo = () => {
 	const username = useSelector((state) => state.user.username);
 	const email = useSelector((state) => state.user.email);
 	const profileImage = useSelector((state) => state.user.profileImage);
+
+	useEffect(() => {
+		if (errorUpload) {
+			Toast.show({
+				type: "error",
+				text1: errorUpload,
+			});
+		}
+		if (success) {
+			Toast.show({
+				type: "success",
+				text1: t("user.profile.picture.editing_success"),
+			});
+		}
+	}, [errorUpload, success, t]);
 
 	const handlePickImage = async () => {
 		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();

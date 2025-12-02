@@ -128,7 +128,9 @@
 				"edit_profile_picture": "Editar foto",
 				"loading_profile_picture": "Subiendo imágen...",
 				"permission_denied_title": "Permiso denegado",
-				"permission_denied_message": "Necesitas otorgar permiso para acceder a la galería de fotos."
+				"permission_denied_message": "Necesitas otorgar permiso para acceder a la galería de fotos.",
+				"editing_success": "Imagen de perfil actualizada con éxito",
+				"editing_error": "Ocurrió un error al subir la imagen de perfil"
 			},
 			"info": {
 				"username": "Usuario",
