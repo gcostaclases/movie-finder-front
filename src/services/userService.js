@@ -57,7 +57,7 @@ export async function deleteUserReview(reviewId) {
 }
 
 // Obtener la watchlist del usuario autenticado
-export async function getUserWatchlist({ page = 1, limit = 20 } = {}) {
+export async function getUserWatchlist({ page = 1, limit = 1000 } = {}) {
 	const response = await api.get("/me/watchlist", { params: { page, limit } });
 	return response.data; // { movies, total, page, limit }
 }

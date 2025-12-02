@@ -69,7 +69,8 @@ const PantallaWatchlistUsuario = ({ activeTab }) => {
 			keyExtractor={(item) => item._id?.toString()}
 			renderItem={({ item }) => <UserMovieItem movie={item} onDelete={() => handleDelete(item)} />}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
-			contentContainerStyle={[styles.container, { flex: 1 }]}
+			style={{ flex: 1 }}
+			contentContainerStyle={styles.container}
 			ListEmptyComponent={
 				<View style={styles.emptyContainer}>
 					<Image source={StitchTriste} style={styles.emptyImage} resizeMode="contain" />
