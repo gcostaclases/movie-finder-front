@@ -54,7 +54,12 @@ movie-finder/
   ```
 
 ### Imágenes
-![Pantalla de inicio con todas las películas](assets/screenshots/Peliculas_Inicio.png)
-![Pantalla de detalle de una película habiendo agregado una reseña](assets/screenshots/Detalle_Pelicula.png)
-![Pantalla de selección de proveedor de la película](assets/screenshots/Proveedor_Pelicula.png)
-![Pantalla de selección de proveedores de un usuario](assets/screenshots/Proveedor_Usuario.png)
+
+<p float="left">
+  <img src="assets/screenshots/Peliculas_Inicio.png" alt="Pantalla de inicio con todas las películas" width="200"/>
+  <img src="assets/screenshots/Detalle_Pelicula.png" alt="Pantalla de detalle de una película habiendo agregado una reseña" width="200"/>
+</p>
+<p float="left">
+  <img src="assets/screenshots/Proveedor_Pelicula.png" alt="Pantalla de selección de proveedor de la película" width="200"/>
+  <img src="assets/screenshots/Proveedor_Usuario.png" alt="Pantalla de selección de proveedores de un usuario" width="200"/>
+</p>
