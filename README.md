@@ -1,6 +1,6 @@
 ## Movie Finder 🎞️ 🔍
 
-Movie Finder es una aplicación móvil desarrollada con React Native que permite a los usuarios buscar películas, ver detalles, calificar, dejar reseñas, gestionar su lista de seguimiento (watchlist) y reportar la disponibilidad de películas en diferentes proveedores de streaming.
+**Movie Finder** es una aplicación móvil desarrollada con React Native que permite a los usuarios buscar películas, ver detalles, calificar, dejar reseñas, gestionar su lista de seguimiento (watchlist) y reportar la disponibilidad de películas en diferentes proveedores de streaming.
 
 ### Características principales
 
