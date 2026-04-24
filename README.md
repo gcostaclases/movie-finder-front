@@ -1,8 +1,8 @@
-## Movie Finder 🎞️ 🔍
+# Movie Finder 🎞️ 🔍
 
 **Movie Finder** es una aplicación móvil desarrollada con React Native que permite a los usuarios buscar películas, ver detalles, calificar, dejar reseñas, gestionar su lista de seguimiento (watchlist) y reportar la disponibilidad de películas en diferentes proveedores de streaming.
 
-### Características principales
+## Características principales
 
 - **Búsqueda de películas:** Encuentra películas por nombre, género, año, etc.
 - **Detalle de película:** Visualiza información detallada, reparto, calificaciones y reseñas.
@@ -12,7 +12,7 @@
 - **Gestión de usuario:** Registro, inicio de sesión, edición de perfil y selección de idioma.
 - **Internacionalización:** Soporte multilenguaje.
 
-### Estructura del proyecto
+## Estructura del proyecto
 
 ```plaintext
 movie-finder/
@@ -35,25 +35,31 @@ movie-finder/
 └── README.md              # Este archivo
 ```
 
-### Instalación
+## Instalación
 
-1. Clona el repositorio:
-  ```bash
-  git clone https://github.com/gcostaclases/movie-finder.git
-  cd movie-finder
-  ```
+Este proyecto está hecho con [Expo](https://expo.dev/).
 
-2. Instala las dependencias:
-  ```bash
+1. Instala la app **Expo Go** desde la tienda de aplicaciones de tu celular (Android o iOS).
+
+2. Clona el repositorio:
+```bash
+  git clone https://github.com/gcostaclases/movie-finder-front.git
+  cd movie-finder-front
+```
+
+3. Instala las dependencias:
+```bash
   npm install
-  ```
+```
 
-3. Ejecuta la app en modo desarrollo:
-  ```bash
+4. Ejecuta la app en modo desarrollo:
+```bash
   npx expo start
-  ```
+```
 
-### Imágenes
+5. Escanea el código QR que aparece con la app Expo Go para abrir la app en tu dispositivo.
+
+## Imágenes
 
 <p float="left">
   <img src="assets/screenshots/Peliculas_Inicio.png" alt="Pantalla de inicio con todas las películas" width="200"/>

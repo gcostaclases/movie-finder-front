@@ -26,6 +26,7 @@ export default {
 			eas: {
 				projectId: "2d3b9f08-79dd-4fb7-bd02-1215732fc54d",
 			},
+			EXPO_PUBLIC_API_BASE_URL: "https://pelis-y-series-app.vercel.app/api/v1/",
 		},
 	},
 };
